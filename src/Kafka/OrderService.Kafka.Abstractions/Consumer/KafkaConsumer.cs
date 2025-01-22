@@ -1,5 +1,4 @@
 using Confluent.Kafka;
-using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,8 +10,6 @@ using OrderService.Kafka.Abstractions.Consumer.Models;
 namespace OrderService.Kafka.Abstractions.Consumer;
 
 internal class KafkaConsumer<TKey, TValue> : BackgroundService
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new()
 {
     private readonly IConsumer<TKey, TValue> _consumer;
     private readonly KafkaConsumerOptions _options;

@@ -1,4 +1,3 @@
-using Google.Protobuf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderService.Kafka.Abstractions.Consumer.Models;
@@ -6,8 +5,6 @@ using OrderService.Kafka.Abstractions.Consumer.Models;
 namespace OrderService.Kafka.Abstractions.Consumer.Builders;
 
 public class KafkaConsumerConfigurationSelector<TKey, TValue> : IKafkaConsumerConfigurationSelector<TKey, TValue>
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new()
 {
     private readonly IServiceCollection _serviceCollection;
 

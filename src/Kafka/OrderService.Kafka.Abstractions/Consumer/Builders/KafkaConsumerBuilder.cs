@@ -1,5 +1,4 @@
 using Confluent.Kafka;
-using Google.Protobuf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderService.Kafka.Abstractions.Consumer.Inbox;
@@ -7,8 +6,6 @@ using OrderService.Kafka.Abstractions.Consumer.Inbox;
 namespace OrderService.Kafka.Abstractions.Consumer.Builders;
 
 internal class KafkaConsumerBuilder<TKey, TValue> : IKafkaConsumerAdditionalSelector<TKey, TValue>
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new()
 {
     private readonly string _topicName;
     private readonly IConfiguration _configuration;

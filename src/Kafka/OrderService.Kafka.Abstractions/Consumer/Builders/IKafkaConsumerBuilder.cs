@@ -1,5 +1,4 @@
 using Confluent.Kafka;
-using Google.Protobuf;
 using Microsoft.Extensions.Configuration;
 using OrderService.Kafka.Abstractions.Consumer.Inbox;
 
@@ -12,27 +11,20 @@ public interface IKafkaConsumerBuilder
 
 public interface IKafkaConsumerKeySelector
 {
-    IKafkaConsumerValueSelector<TKey> WithKey<TKey>()
-        where TKey : IMessage<TKey>, new();
+    IKafkaConsumerValueSelector<TKey> WithKey<TKey>();
 }
 
 public interface IKafkaConsumerValueSelector<TKey>
-    where TKey : IMessage<TKey>, new()
 {
-    IKafkaConsumerConfigurationSelector<TKey, TValue> WithValue<TValue>()
-        where TValue : IMessage<TValue>, new();
+    IKafkaConsumerConfigurationSelector<TKey, TValue> WithValue<TValue>();
 }
 
 public interface IKafkaConsumerConfigurationSelector<TKey, TValue>
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new()
 {
     IKafkaConsumerAdditionalSelector<TKey, TValue> WithConfiguration(IConfiguration configuration);
 }
 
 public interface IKafkaConsumerAdditionalSelector<TKey, TValue> : IKafkaConsumerBuilder
-    where TValue : IMessage<TValue>, new()
-    where TKey : IMessage<TKey>, new()
 {
     public IKafkaConsumerAdditionalSelector<TKey, TValue> DeserializeKeyWith<T>()
         where T : class, IDeserializer<TKey>;

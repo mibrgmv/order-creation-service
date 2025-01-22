@@ -1,5 +1,3 @@
-using Google.Protobuf;
-
 namespace OrderService.Kafka.Abstractions.Consumer.Inbox;
 
 public record InboxMessage<TKey, TValue>(
@@ -7,6 +5,4 @@ public record InboxMessage<TKey, TValue>(
     TKey MessageKey,
     TValue MessageValue,
     DateTime CreatedAt,
-    DateTime? ProcessedAt)
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new();
+    DateTime? ProcessedAt);

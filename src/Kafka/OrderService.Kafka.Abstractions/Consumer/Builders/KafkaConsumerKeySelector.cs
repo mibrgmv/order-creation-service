@@ -1,4 +1,3 @@
-using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace OrderService.Kafka.Abstractions.Consumer.Builders;
@@ -13,7 +12,6 @@ internal class KafkaConsumerKeySelector : IKafkaConsumerKeySelector
     }
 
     public IKafkaConsumerValueSelector<TKey> WithKey<TKey>()
-        where TKey : IMessage<TKey>, new()
     {
         return new KafkaConsumerValueSelector<TKey>(_serviceCollection);
     }

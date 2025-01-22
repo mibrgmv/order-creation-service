@@ -8,8 +8,6 @@ using OrderService.Kafka.Abstractions.Consumer.Models;
 namespace OrderService.Kafka.Abstractions.Consumer.Inbox;
 
 internal class InboxMessageProcessor<TKey, TValue> : BackgroundService
-    where TKey : IMessage<TKey>, new()
-    where TValue : IMessage<TValue>, new()
 {
     private readonly string _topicName;
     private readonly IServiceScopeFactory _scopeFactory;
