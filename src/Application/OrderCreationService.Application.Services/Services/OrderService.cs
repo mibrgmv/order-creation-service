@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Transactions;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
+using OrderCreationService.Application.Abstractions.Requests;
 using OrderCreationService.Application.Abstractions.Services;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
