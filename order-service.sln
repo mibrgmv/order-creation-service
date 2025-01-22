@@ -4,7 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{5EF9F9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DC322BE-B552-4CF6-9851-F61C8BC96E7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Kafka.Abstractions", "src\Kafka\OrderService.Kafka.Abstractions\OrderService.Kafka.Abstractions.csproj", "{44111CA8-6067-41BE-A966-0AE8C3F746A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kafka.Abstractions", "src\Kafka\Kafka.Abstractions\Kafka.Abstractions.csproj", "{44111CA8-6067-41BE-A966-0AE8C3F746A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderCreationService.Application.Abstractions", "src\Application\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj", "{F28D0A8A-C8E4-480E-8905-5055EAE4730C}"
 EndProject

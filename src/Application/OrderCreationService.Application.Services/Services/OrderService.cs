@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Transactions;
+using Google.Protobuf.WellKnownTypes;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Abstractions.Requests;
@@ -8,10 +9,12 @@ using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Application.Services.Exceptions;
+using Orders.Kafka.Contracts;
+using Kafka.Abstractions.Producer.Outbox;
 
 namespace OrderCreationService.Application.Services.Services;
 
-public class OrderService : IOrderService
+internal class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;

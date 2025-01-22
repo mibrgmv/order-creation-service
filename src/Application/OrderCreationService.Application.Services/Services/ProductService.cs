@@ -5,7 +5,7 @@ using OrderCreationService.Application.Models.Models;
 
 namespace OrderCreationService.Application.Services.Services;
 
-public class ProductService : IProductService
+internal class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
 

@@ -7,11 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Kafka\Kafka.Abstractions\Kafka.Abstractions.csproj" />
       <ProjectReference Include="..\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Grpc.Tools" Version="2.69.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="protos\*.proto" GrpcServices="None" />
     </ItemGroup>
 
 </Project>
