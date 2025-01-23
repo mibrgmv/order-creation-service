@@ -1,7 +1,3 @@
-using System.Data;
-using System.Data.Common;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
 using Npgsql;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
@@ -9,6 +5,10 @@ using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Infrastructure.Persistence.Extensions;
+using System.Data;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace OrderCreationService.Infrastructure.Persistence.Repositories;
 

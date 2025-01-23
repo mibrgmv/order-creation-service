@@ -12,5 +12,12 @@
         <PackageVersion Include="Npgsql" Version="9.0.2" />
         <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
+        <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
+        <PackageVersion Include="SourceKit.Analyzers.Collections" Version="1.0.49"/>
+        <PackageVersion Include="SourceKit.Analyzers.Enumerable" Version="1.0.49"/>
+        <PackageVersion Include="SourceKit.Analyzers.MemberAccessibility" Version="1.0.31"/>
+        <PackageVersion Include="SourceKit.Analyzers.Nullable" Version="1.0.49"/>
+        <PackageVersion Include="SourceKit.Analyzers.Properties" Version="1.0.49"/>
+        <PackageVersion Include="Itmo.Dev.Editorconfig" Version="1.0.8"/>
     </ItemGroup>
 </Project>

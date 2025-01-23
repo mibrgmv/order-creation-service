@@ -1,11 +1,11 @@
-using System.Data;
-using System.Runtime.CompilerServices;
 using Npgsql;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Models.Models;
-using OrderCreationService.Infrastructure.Persistence.Extensions;
 using OrderCreationService.Infrastructure.Persistence.Exceptions;
+using OrderCreationService.Infrastructure.Persistence.Extensions;
+using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace OrderCreationService.Infrastructure.Persistence.Repositories;
 

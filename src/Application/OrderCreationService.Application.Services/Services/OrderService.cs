@@ -1,6 +1,5 @@
-using System.Runtime.CompilerServices;
-using System.Transactions;
 using Google.Protobuf.WellKnownTypes;
+using Kafka.Abstractions.Producer.Outbox;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Abstractions.Requests;
@@ -10,7 +9,8 @@ using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Application.Services.Exceptions;
 using Orders.Kafka.Contracts;
-using Kafka.Abstractions.Producer.Outbox;
+using System.Runtime.CompilerServices;
+using System.Transactions;
 
 namespace OrderCreationService.Application.Services.Services;
 

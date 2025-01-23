@@ -1,4 +1,3 @@
-using Google.Protobuf;
 using Kafka.Abstractions.Consumer.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
