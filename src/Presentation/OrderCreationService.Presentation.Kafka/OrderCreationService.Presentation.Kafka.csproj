@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Kafka\Kafka.Abstractions\Kafka.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql" />
+      <PackageReference Include="Grpc.Tools" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="protos\*.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+</Project>

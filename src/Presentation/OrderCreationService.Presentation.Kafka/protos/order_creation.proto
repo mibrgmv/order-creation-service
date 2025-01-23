@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package orders;
+
+option csharp_namespace = "Orders.Kafka.Contracts";
+
+import "google/protobuf/timestamp.proto";
+
+message OrderCreationKey {
+  int64 order_id = 1;
+}
+
+message OrderCreationValue {
+
+  oneof event {
+    OrderCreated order_created = 1;
+    OrderProcessingStarted order_processing_started = 2;
+  }
+
+  message OrderCreated {
+    int64 order_id = 1;
+    google.protobuf.Timestamp created_at = 2;
+  }
+
+  message OrderProcessingStarted {
+    int64 order_id = 1;
+    google.protobuf.Timestamp started_at = 2;
+  }
+}

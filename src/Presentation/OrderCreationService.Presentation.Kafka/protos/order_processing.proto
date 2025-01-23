@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package orders;
+
+option csharp_namespace = "Orders.Kafka.Contracts";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message OrderProcessingKey {
+  int64 order_id = 1;
+}
+
+message OrderProcessingValue {
+
+  oneof event {
+    OrderApprovalReceived approval_received = 1;
+    OrderPackingStarted packing_started = 2;
+    OrderPackingFinished packing_finished = 3;
+    OrderDeliveryStarted delivery_started = 4;
+    OrderDeliveryFinished delivery_finished = 5;
+  }
+
+  message OrderApprovalReceived {
+    int64 order_id = 1;
+    bool is_approved = 2;
+    string created_by = 3;
+    google.protobuf.Timestamp created_at = 4;
+  }
+
+  message OrderPackingStarted {
+    int64 order_id = 1;
+    string packing_by = 2;
+    google.protobuf.Timestamp started_at = 3;
+  }
+
+  message OrderPackingFinished {
+    int64 order_id = 1;
+    google.protobuf.Timestamp finished_at = 2;
+    bool is_finished_successfully = 3;
+    google.protobuf.StringValue failure_reason = 4;
+  }
+
+  message OrderDeliveryStarted {
+    int64 order_id = 1;
+    string delivered_by = 2;
+    google.protobuf.Timestamp started_at = 3;
+  }
+
+  message OrderDeliveryFinished {
+    int64 order_id = 1;
+    google.protobuf.Timestamp finished_at = 2;
+    bool is_finished_successfully = 3;
+    google.protobuf.StringValue failure_reason = 4;
+  }
+}
