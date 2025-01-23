@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentMigrator" Version="6.2.0" />
-      <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
-      <PackageReference Include="Npgsql" Version="9.0.2" />
+      <PackageReference Include="FluentMigrator" />
+      <PackageReference Include="FluentMigrator.Runner" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+      <PackageReference Include="Npgsql" />
     </ItemGroup>
 
     <ItemGroup>

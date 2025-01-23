@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
-      <PackageReference Include="Google.Protobuf" Version="3.29.3" />
-      <PackageReference Include="Grpc.Tools" Version="2.69.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
+      <PackageReference Include="Confluent.Kafka" />
+      <PackageReference Include="Google.Protobuf" />
+      <PackageReference Include="Grpc.Tools" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" />
     </ItemGroup>
 
 </Project>
