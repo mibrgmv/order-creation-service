@@ -1,14 +1,15 @@
 using Orders.CreationService.Contracts;
+using CsharpPayloads = OrderCreationService.Application.Models.Payloads;
 
 namespace OrderCreationService.Presentation.Grpc.Extensions;
 
 public static class PayloadExtensions
 {
-    public static BasePayload SerializePayload(Application.Models.Payloads.BasePayload payload)
+    public static BasePayload SerializePayload(CsharpPayloads.BasePayload payload)
     {
         return payload switch
         {
-            Application.Models.Payloads.AddOrderPayload addOrderPayload => new BasePayload
+            CsharpPayloads.AddOrderPayload addOrderPayload => new BasePayload
             {
                 AddOrder = new AddOrderPayload
                 {
@@ -16,7 +17,7 @@ public static class PayloadExtensions
                 },
             },
 
-            Application.Models.Payloads.AddProductToOrderPayload addProductToOrderPayload => new BasePayload
+            CsharpPayloads.AddProductToOrderPayload addProductToOrderPayload => new BasePayload
             {
                 AddProductToOrder = new AddProductToOrderPayload
                 {
@@ -25,7 +26,7 @@ public static class PayloadExtensions
                 },
             },
 
-            Application.Models.Payloads.RemoveProductFromOrderPayload removeProductFromOrderPayload =>
+            CsharpPayloads.RemoveProductFromOrderPayload removeProductFromOrderPayload =>
                 new BasePayload
                 {
                     RemoveProductFromOrder = new RemoveProductFromOrderPayload
@@ -34,7 +35,7 @@ public static class PayloadExtensions
                     },
                 },
 
-            Application.Models.Payloads.UpdateStatePayload updateStatePayload =>
+            CsharpPayloads.UpdateStatePayload updateStatePayload =>
                 new BasePayload
                 {
                     UpdateState = new UpdateStatePayload
@@ -45,6 +46,35 @@ public static class PayloadExtensions
                 },
 
             _ => new BasePayload(),
+        };
+    }
+
+    public static CsharpPayloads.BasePayload DeserializePayload(BasePayload payload)
+    {
+        return payload.PayloadCase switch
+        {
+            BasePayload.PayloadOneofCase.AddOrder =>
+                new CsharpPayloads.AddOrderPayload(
+                    orderCreatedBy: payload.AddOrder.OrderCreatedBy),
+
+            BasePayload.PayloadOneofCase.AddProductToOrder =>
+                new CsharpPayloads.AddProductToOrderPayload(
+                    productId: payload.AddProductToOrder.ProductId,
+                    quantity: payload.AddProductToOrder.Quantity),
+
+            BasePayload.PayloadOneofCase.RemoveProductFromOrder =>
+                new CsharpPayloads.RemoveProductFromOrderPayload(
+                    productId: payload.RemoveProductFromOrder.ProductId),
+
+            BasePayload.PayloadOneofCase.UpdateState =>
+                new CsharpPayloads.UpdateStatePayload(
+                    oldState: (Application.Models.Enums.OrderState)payload.UpdateState.OldState,
+                    newState: (Application.Models.Enums.OrderState)payload.UpdateState.NewState),
+
+            BasePayload.PayloadOneofCase.None
+                => new CsharpPayloads.BasePayload(),
+
+            _ => new CsharpPayloads.BasePayload(),
         };
     }
 }
