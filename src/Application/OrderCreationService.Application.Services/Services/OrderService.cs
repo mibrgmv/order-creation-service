@@ -14,7 +14,7 @@ using System.Transactions;
 
 namespace OrderCreationService.Application.Services.Services;
 
-internal class OrderService : IOrderService
+internal sealed class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;

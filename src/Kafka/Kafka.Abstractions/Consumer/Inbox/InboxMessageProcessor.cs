@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Kafka.Abstractions.Consumer.Inbox;
 
-internal class InboxMessageProcessor<TKey, TValue> : BackgroundService
+internal sealed class InboxMessageProcessor<TKey, TValue> : BackgroundService
 {
     private readonly string _topicName;
     private readonly IServiceScopeFactory _scopeFactory;

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kafka.Abstractions.Configuration;
 
-internal class KafkaConfigurationBuilder : IKafkaConfigurationOptionsSelector, IKafkaConfigurationBuilder
+internal sealed class KafkaConfigurationBuilder : IKafkaConfigurationOptionsSelector, IKafkaConfigurationBuilder
 {
     public KafkaConfigurationBuilder(IServiceCollection services)
     {

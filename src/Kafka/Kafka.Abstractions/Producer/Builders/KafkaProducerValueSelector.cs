@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kafka.Abstractions.Producer.Builders;
 
-internal class KafkaProducerValueSelector<TKey> : IKafkaProducerValueSelector<TKey>
+internal sealed class KafkaProducerValueSelector<TKey> : IKafkaProducerValueSelector<TKey>
 {
     private readonly IServiceCollection _serviceCollection;
 

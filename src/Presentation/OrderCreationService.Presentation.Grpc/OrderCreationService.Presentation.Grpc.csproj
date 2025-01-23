@@ -4,6 +4,24 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\OrderCreationService.Application.Services\OrderCreationService.Application.Services.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\OrderCreationService.Infrastructure.Persistence\OrderCreationService.Infrastructure.Persistence.csproj" />
+      <ProjectReference Include="..\OrderCreationService.Presentation.Kafka\OrderCreationService.Presentation.Kafka.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" />
+        <PackageReference Include="Grpc.AspNetCore.Server" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
+        <Protobuf Include="protos\*.proto" GrpcServices="Server" />
+    </ItemGroup>
 
 </Project>

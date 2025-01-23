@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+package orders;
+
+option csharp_namespace = "Orders.CreationService.Contracts";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+service OrderService {
+  rpc AddOrders (AddOrdersRequest) returns (AddOrdersResponse);
+  rpc AddProductsToOrder (AddProductsToOrderRequest) returns (AddProductToOrderResponse);
+  rpc RemoveProductsFromOrder (RemoveProductsFromOrderRequest) returns (RemoveProductsFromOrderResponse);
+  rpc StartOrderProcessing (StartOrderProcessingRequest) returns (StartOrderProcessingResponse);
+  rpc CancelOrder (CancelOrderRequest) returns (CancelOrderResponse);
+  rpc QueryOrders (OrderQuery) returns (stream OrderDto);
+  rpc QueryItems (OrderItemQuery) returns (stream OrderItemDto);
+  rpc QueryHistory (OrderHistoryQuery) returns (stream OrderHistoryItemDto);
+}
+
+message AddOrderDto {
+  string order_created_by = 1;
+}
+
+message AddOrdersRequest {
+  repeated AddOrderDto orders = 1;
+}
+
+message AddOrdersResponse {
+  repeated int64 orders_ids = 1;
+}
+
+message AddProductToOrderDto {
+  int64 product_id = 1;
+  int32 quantity = 2;
+}
+
+message AddProductsToOrderRequest {
+  int64 order_id = 1;
+  repeated AddProductToOrderDto products = 2;
+}
+
+message AddProductToOrderResponse {
+}
+
+message RemoveProductsFromOrderRequest {
+  int64 order_id = 1;
+  repeated int64 product_ids = 2;
+}
+
+message RemoveProductsFromOrderResponse {
+}
+
+message StartOrderProcessingRequest {
+  int64 order_id = 1;
+  OrderState new_state = 2;
+}
+
+message StartOrderProcessingResponse {
+}
+
+
+message CancelOrderRequest {
+  int64 order_id = 1;
+  OrderState new_state = 2;
+}
+
+message CancelOrderResponse {
+}
+
+message OrderQuery {
+  repeated int64 ids = 1;
+  OrderState order_state = 2;
+  google.protobuf.StringValue created_by = 3;
+  int32 cursor = 4;
+  int32 page_size = 5;
+}
+
+message OrderItemQuery {
+  repeated int64 ids = 1;
+  repeated int64 order_ids = 2;
+  repeated int64 product_ids = 3;
+  google.protobuf.BoolValue deleted = 4;
+  int32 cursor = 5;
+  int32 page_size = 6;
+}
+
+message OrderHistoryQuery {
+  repeated int64 ids = 1;
+  repeated int64 order_ids = 2;
+  OrderHistoryItemKind kind = 3;
+  int32 cursor = 4;
+  int32 page_size = 5;
+}
+
+message OrderDto {
+  OrderState order_state = 1;
+  google.protobuf.Timestamp order_created_at = 2;
+  string order_created_by = 3;
+}
+
+message OrderItemDto {
+  int64 order_id = 1;
+  int64 product_id = 2;
+  int32 order_item_quantity = 3;
+}
+
+message OrderHistoryItemDto {
+  int64 order_id = 1;
+  google.protobuf.Timestamp order_history_item_created_at = 2;
+  OrderHistoryItemKind order_history_item_kind = 3;
+  BasePayload payload = 4;
+}
+
+message BasePayload {
+  oneof payload {
+    AddOrderPayload add_order = 1;
+    AddProductToOrderPayload add_product_to_order = 2;
+    RemoveProductFromOrderPayload remove_product_from_order = 3;
+    UpdateStatePayload update_state = 4;
+  }
+}
+
+message AddOrderPayload {
+  int64 order_id = 1;
+  OrderState order_state = 2;
+  string order_created_by = 3;
+}
+
+message AddProductToOrderPayload {
+  int64 product_id = 1;
+  int32 quantity = 2;
+}
+
+message RemoveProductFromOrderPayload {
+  int64 product_id = 1;
+}
+
+message UpdateStatePayload {
+  OrderState old_state = 1;
+  OrderState new_state = 2;
+}
+
+enum OrderState {
+  ORDER_STATE_UNSPECIFIED = 0;
+  ORDER_STATE_CREATED = 1;
+  ORDER_STATE_PROCESSING = 2;
+  ORDER_STATE_COMPLETED = 3;
+  ORDER_STATE_CANCELLED = 4;
+}
+
+enum OrderHistoryItemKind {
+  ORDER_HISTORY_ITEM_KIND_UNSPECIFIED = 0;
+  ORDER_HISTORY_ITEM_KIND_CREATED = 1;
+  ORDER_HISTORY_ITEM_KIND_ITEM_ADDED = 2;
+  ORDER_HISTORY_ITEM_KIND_ITEM_REMOVED = 3;
+  ORDER_HISTORY_ITEM_KIND_STATE_CHANGED = 4;
+}

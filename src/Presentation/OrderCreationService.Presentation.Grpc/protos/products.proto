@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package products;
+
+option csharp_namespace = "Products.CreationService.Contracts";
+
+import "google/protobuf/wrappers.proto";
+
+service ProductService {
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
+  rpc AddProducts(AddProductsRequest) returns (AddProductsResponse);
+  rpc QueryProducts(ProductQuery) returns (stream ProductDto);
+}
+
+message GetProductRequest {
+  int64 id = 1;
+}
+
+message GetProductResponse {
+  ProductDto product = 1;
+}
+
+message AddProductDto {
+  string name = 1;
+  double price = 2;
+}
+
+message AddProductsRequest {
+  repeated AddProductDto products = 1;
+}
+
+message AddProductsResponse {
+  repeated int64 products_ids = 1;
+}
+
+message ProductQuery {
+  repeated int64 ids = 1;
+  google.protobuf.StringValue name_pattern = 2;
+  google.protobuf.DoubleValue min_price = 3;
+  google.protobuf.DoubleValue max_price = 4;
+  int32 cursor = 5;
+  int32 page_size = 6;
+}
+
+message ProductDto {
+  string name = 1;
+  double price = 2;
+}

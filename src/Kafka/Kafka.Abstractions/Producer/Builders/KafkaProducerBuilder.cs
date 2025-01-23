@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kafka.Abstractions.Producer.Builders;
 
-internal class KafkaProducerBuilder<TKey, TValue> : IKafkaProducerAdditionalSelector<TKey, TValue>
+internal sealed class KafkaProducerBuilder<TKey, TValue> : IKafkaProducerAdditionalSelector<TKey, TValue>
 {
     private readonly string _topicName;
     private readonly IConfiguration _configuration;

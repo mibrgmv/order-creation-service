@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Kafka.Abstractions.Producer.Outbox;
 
-internal class OutboxMessageProcessor<TKey, TValue> : BackgroundService
+internal sealed class OutboxMessageProcessor<TKey, TValue> : BackgroundService
 {
     private readonly string _topicName;
     private readonly IServiceScopeFactory _scopeFactory;

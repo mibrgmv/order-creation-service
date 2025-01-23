@@ -18,18 +18,16 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Itmo.Dev.Editorconfig"/>
+        <PackageReference Include="System.Linq.Async"/>
     </ItemGroup>
 
     <!-- ITMO is DEV code style analyzers -->
     <ItemGroup>
-        <PackageReference Include="SourceKit.Analyzers.Collections" />
-        <PackageReference Include="SourceKit.Analyzers.Enumerable" />
-        <PackageReference Include="SourceKit.Analyzers.MemberAccessibility" />
-        <PackageReference Include="SourceKit.Analyzers.Nullable" />
-        <PackageReference Include="SourceKit.Analyzers.Properties" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Itmo.Dev.Editorconfig"/>
+        <PackageReference Include="SourceKit.Analyzers.Collections"/>
+        <PackageReference Include="SourceKit.Analyzers.Enumerable"/>
+        <PackageReference Include="SourceKit.Analyzers.MemberAccessibility"/>
+        <PackageReference Include="SourceKit.Analyzers.Nullable"/>
+        <PackageReference Include="SourceKit.Analyzers.Properties"/>
     </ItemGroup>
 </Project>

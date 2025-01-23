@@ -9,7 +9,7 @@ namespace OrderCreationService.Presentation.Kafka.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddKafka(
+    public static IServiceCollection AddPresentationKafka(
         this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {

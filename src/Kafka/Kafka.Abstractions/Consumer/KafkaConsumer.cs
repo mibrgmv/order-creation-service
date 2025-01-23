@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Kafka.Abstractions.Consumer;
 
-internal class KafkaConsumer<TKey, TValue> : BackgroundService
+internal sealed class KafkaConsumer<TKey, TValue> : BackgroundService
 {
     private readonly IConsumer<TKey, TValue> _consumer;
     private readonly KafkaConsumerOptions _options;
