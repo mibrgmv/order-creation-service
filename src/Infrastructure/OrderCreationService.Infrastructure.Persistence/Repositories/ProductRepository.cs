@@ -79,7 +79,7 @@ public class ProductRepository : IProductRepository
                product_price
         from products
         where (product_id > :cursor)
-          and (CARDINALITY(:ids) = 0 or product_id = any (:ids))
+          and (cardinality(:ids) = 0 or product_id = any (:ids))
           and (:name_pattern::text is null or product_name like :name_pattern::text)
           and (:min_price::money is null or product_price > :min_price::money)
           and (:max_price::money is null or product_price < :max_price::money)
