@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Kafka\Kafka.Abstractions\Kafka.Abstractions.csproj" />
       <ProjectReference Include="..\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\OrderCreationService.Application.Contracts\OrderCreationService.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -117,7 +117,7 @@ public class OrderRepository : IOrderRepository
         await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
             .AddParameter("ids", query.Ids)
             .AddParameter("created_by", query.CreatedBy)
-            .AddParameter("orderState", query.State)
+            .AddParameter("orderState", query.OrderState)
             .AddParameter("cursor", query.Cursor)
             .AddParameter("page_size", query.PageSize);
 

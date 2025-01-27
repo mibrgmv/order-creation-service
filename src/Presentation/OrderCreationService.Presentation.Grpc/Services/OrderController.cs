@@ -1,11 +1,12 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using OrderCreationService.Application.Abstractions.Services;
+using OrderCreationService.Application.Contracts.Orders;
+using OrderCreationService.Application.Contracts.Orders.Requests;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Presentation.Grpc.Extensions;
 using Orders.CreationService.Contracts;
-using AddOrderDto = OrderCreationService.Application.Abstractions.Requests.AddOrderDto;
-using AddProductToOrderDto = OrderCreationService.Application.Abstractions.Requests.AddProductToOrderDto;
+using AddOrderDto = OrderCreationService.Application.Contracts.Requests.AddOrderDto;
+using AddProductToOrderDto = OrderCreationService.Application.Contracts.Requests.AddProductToOrderDto;
 
 namespace OrderCreationService.Presentation.Grpc.Services;
 
@@ -73,14 +74,14 @@ public class OrderController : OrderService.OrderServiceBase
         IServerStreamWriter<OrderDto> responseStream,
         ServerCallContext context)
     {
-        var query = new Application.Abstractions.Queries.OrderQuery(
+        var applicationRequest = new QueryOrders.Request(
             request.Ids.ToArray(),
             (Application.Models.Enums.OrderState?)request.OrderState,
             request.CreatedBy,
             request.Cursor,
             request.PageSize);
 
-        await foreach (Order order in _orderService.QueryOrdersAsync(query, context.CancellationToken))
+        await foreach (Order order in _orderService.QueryOrdersAsync(applicationRequest, context.CancellationToken))
         {
             await responseStream.WriteAsync(
                 new OrderDto
@@ -98,7 +99,7 @@ public class OrderController : OrderService.OrderServiceBase
         IServerStreamWriter<OrderItemDto> responseStream,
         ServerCallContext context)
     {
-        var query = new Application.Abstractions.Queries.OrderItemQuery(
+        var applicationRequest = new QueryOrderItems.Request(
             request.Ids.ToArray(),
             request.OrderIds.ToArray(),
             request.ProductIds.ToArray(),
@@ -106,7 +107,7 @@ public class OrderController : OrderService.OrderServiceBase
             request.Cursor,
             request.PageSize);
 
-        await foreach (OrderItem item in _orderService.QueryItemsAsync(query, context.CancellationToken))
+        await foreach (OrderItem item in _orderService.QueryOrderItemsAsync(applicationRequest, context.CancellationToken))
         {
             await responseStream.WriteAsync(
                 new OrderItemDto
@@ -121,14 +122,14 @@ public class OrderController : OrderService.OrderServiceBase
 
     public override async Task QueryHistory(OrderHistoryQuery request, IServerStreamWriter<OrderHistoryItemDto> responseStream, ServerCallContext context)
     {
-        var query = new Application.Abstractions.Queries.OrderHistoryQuery(
+        var applicationRequest = new QueryOrderHistory.Request(
             request.OrderIds.ToArray(),
             request.OrderIds.ToArray(),
             request.Kind == OrderHistoryItemKind.Unspecified ? null : (Application.Models.Enums.OrderHistoryItemKind?)request.Kind,
             request.Cursor,
             request.PageSize);
 
-        await foreach (OrderHistoryItem item in _orderService.QueryHistoryAsync(query, context.CancellationToken))
+        await foreach (OrderHistoryItem item in _orderService.QueryOrderHistoryAsync(applicationRequest, context.CancellationToken))
         {
             await responseStream.WriteAsync(
                 new OrderHistoryItemDto

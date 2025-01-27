@@ -1,7 +1,7 @@
 using Kafka.Abstractions.Consumer;
 using Kafka.Abstractions.Consumer.Models;
 using Microsoft.Extensions.Logging;
-using OrderCreationService.Application.Abstractions.Services;
+using OrderCreationService.Application.Contracts.Orders;
 using OrderCreationService.Application.Models.Enums;
 using Orders.Kafka.Contracts;
 

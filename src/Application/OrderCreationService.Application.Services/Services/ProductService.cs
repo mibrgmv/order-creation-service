@@ -1,6 +1,6 @@
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
-using OrderCreationService.Application.Abstractions.Services;
+using OrderCreationService.Application.Contracts.Products;
 using OrderCreationService.Application.Models.Models;
 
 namespace OrderCreationService.Application.Services.Services;
@@ -19,13 +19,18 @@ internal sealed class ProductService : IProductService
         return await _productRepository.AddProductsAsync(products, cancellationToken);
     }
 
-    public async Task<Product> GetProductAsync(long productId, CancellationToken cancellationToken)
+    public IAsyncEnumerable<Product> QueryProductsAsync(
+        QueryProducts.Request request,
+        CancellationToken cancellationToken)
     {
-        return await _productRepository.GetProductAsync(productId, cancellationToken);
-    }
+        var query = new ProductQuery(
+            Ids: request.Ids,
+            NamePattern: request.NamePattern,
+            MinPrice: request.MinPrice,
+            MaxPrice: request.MaxPrice,
+            Cursor: request.Cursor,
+            PageSize: request.PageSize);
 
-    public IAsyncEnumerable<Product> QueryProductsAsync(ProductQuery query, CancellationToken cancellationToken)
-    {
         return _productRepository.QueryProductsAsync(query, cancellationToken);
     }
 }

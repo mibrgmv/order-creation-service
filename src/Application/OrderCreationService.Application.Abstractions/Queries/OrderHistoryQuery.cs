@@ -5,6 +5,6 @@ namespace OrderCreationService.Application.Abstractions.Queries;
 public record OrderHistoryQuery(
     long[] Ids,
     long[]? OrderIds,
-    OrderHistoryItemKind? Kind,
+    OrderHistoryItemKind? ItemKind,
     int Cursor,
     int PageSize);

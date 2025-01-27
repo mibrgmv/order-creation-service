@@ -2,14 +2,14 @@ using Google.Protobuf.WellKnownTypes;
 using Kafka.Abstractions.Producer.Outbox;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
-using OrderCreationService.Application.Abstractions.Requests;
-using OrderCreationService.Application.Abstractions.Services;
+using OrderCreationService.Application.Contracts.Orders;
+using OrderCreationService.Application.Contracts.Orders.Requests;
+using OrderCreationService.Application.Contracts.Requests;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Application.Services.Exceptions;
 using Orders.Kafka.Contracts;
-using System.Runtime.CompilerServices;
 using System.Transactions;
 
 namespace OrderCreationService.Application.Services.Services;
@@ -36,7 +36,9 @@ internal sealed class OrderService : IOrderService
         _outboxRepository = outboxRepository;
     }
 
-    public async Task<long[]> AddOrdersAsync(IReadOnlyCollection<AddOrderDto> orders, CancellationToken cancellationToken)
+    public async Task<long[]> AddOrdersAsync(
+        IReadOnlyCollection<AddOrderDto> orders,
+        CancellationToken cancellationToken)
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -129,7 +131,10 @@ internal sealed class OrderService : IOrderService
         transaction.Complete();
     }
 
-    public async Task RemoveProductsFromOrderAsync(long orderId, long[] productIds, CancellationToken cancellationToken)
+    public async Task RemoveProductsFromOrderAsync(
+        long orderId,
+        long[] productIds,
+        CancellationToken cancellationToken)
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -255,7 +260,10 @@ internal sealed class OrderService : IOrderService
         transaction.Complete();
     }
 
-    public async Task UpdateOrderProcessingStatusAsync(long orderId, OrderProcessingStatus status, CancellationToken cancellationToken)
+    public async Task UpdateOrderProcessingStatusAsync(
+        long orderId,
+        OrderProcessingStatus status,
+        CancellationToken cancellationToken)
     {
         var payload = new OrderProcessingStatusPayload(status);
 
@@ -269,21 +277,44 @@ internal sealed class OrderService : IOrderService
         await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
     }
 
-    public async IAsyncEnumerable<Order> QueryOrdersAsync(OrderQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public IAsyncEnumerable<Order> QueryOrdersAsync(
+        QueryOrders.Request request,
+        CancellationToken cancellationToken)
     {
-        await foreach (Order order in _orderRepository.QueryOrdersAsync(query, cancellationToken))
-            yield return order;
+        var query = new OrderQuery(
+            Ids: request.Ids,
+            OrderState: request.OrderState,
+            CreatedBy: request.CreatedBy,
+            Cursor: request.Cursor,
+            PageSize: request.PageSize);
+
+        return _orderRepository.QueryOrdersAsync(query, cancellationToken);
     }
 
-    public async IAsyncEnumerable<OrderItem> QueryItemsAsync(OrderItemQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public IAsyncEnumerable<OrderItem> QueryOrderItemsAsync(QueryOrderItems.Request request, CancellationToken cancellationToken)
     {
-        await foreach (OrderItem orderItem in _orderItemsRepository.QueryOrderItemsAsync(query, cancellationToken))
-            yield return orderItem;
+        var query = new OrderItemQuery(
+            Ids: request.Ids,
+            OrderIds: request.OrderIds,
+            ProductIds: request.ProductIds,
+            Deleted: request.Deleted,
+            Cursor: request.Cursor,
+            PageSize: request.PageSize);
+
+        return _orderItemsRepository.QueryOrderItemsAsync(query, cancellationToken);
     }
 
-    public async IAsyncEnumerable<OrderHistoryItem> QueryHistoryAsync(OrderHistoryQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public IAsyncEnumerable<OrderHistoryItem> QueryOrderHistoryAsync(
+        QueryOrderHistory.Request request,
+        CancellationToken cancellationToken)
     {
-        await foreach (OrderHistoryItem historyItem in _orderHistoryRepository.QueryItemsAsync(query, cancellationToken))
-            yield return historyItem;
+        var query = new OrderHistoryQuery(
+            Ids: request.Ids,
+            OrderIds: request.OrderIds,
+            ItemKind: request.ItemKind,
+            Cursor: request.Cursor,
+            PageSize: request.PageSize);
+
+        return _orderHistoryRepository.QueryItemsAsync(query, cancellationToken);
     }
 }

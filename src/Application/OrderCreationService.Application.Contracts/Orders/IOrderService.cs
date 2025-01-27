@@ -1,9 +1,9 @@
-using OrderCreationService.Application.Abstractions.Queries;
-using OrderCreationService.Application.Abstractions.Requests;
+using OrderCreationService.Application.Contracts.Orders.Requests;
+using OrderCreationService.Application.Contracts.Requests;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 
-namespace OrderCreationService.Application.Abstractions.Services;
+namespace OrderCreationService.Application.Contracts.Orders;
 
 public interface IOrderService
 {
@@ -21,9 +21,9 @@ public interface IOrderService
 
     Task UpdateOrderProcessingStatusAsync(long orderId, OrderProcessingStatus status, CancellationToken cancellationToken);
 
-    IAsyncEnumerable<Order> QueryOrdersAsync(OrderQuery query, CancellationToken cancellationToken);
+    IAsyncEnumerable<Order> QueryOrdersAsync(QueryOrders.Request request, CancellationToken cancellationToken);
 
-    IAsyncEnumerable<OrderItem> QueryItemsAsync(OrderItemQuery query, CancellationToken cancellationToken);
+    IAsyncEnumerable<OrderItem> QueryOrderItemsAsync(QueryOrderItems.Request request, CancellationToken cancellationToken);
 
-    IAsyncEnumerable<OrderHistoryItem> QueryHistoryAsync(OrderHistoryQuery query, CancellationToken cancellationToken);
+    IAsyncEnumerable<OrderHistoryItem> QueryOrderHistoryAsync(QueryOrderHistory.Request request, CancellationToken cancellationToken);
 }

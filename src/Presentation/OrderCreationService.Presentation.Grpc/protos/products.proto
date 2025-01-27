@@ -7,17 +7,8 @@ option csharp_namespace = "Products.CreationService.Contracts";
 import "google/protobuf/wrappers.proto";
 
 service ProductService {
-  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
   rpc AddProducts(AddProductsRequest) returns (AddProductsResponse);
   rpc QueryProducts(ProductQuery) returns (stream ProductDto);
-}
-
-message GetProductRequest {
-  int64 id = 1;
-}
-
-message GetProductResponse {
-  ProductDto product = 1;
 }
 
 message AddProductDto {

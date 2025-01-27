@@ -1,5 +1,5 @@
 using Grpc.Core;
-using OrderCreationService.Application.Abstractions.Services;
+using OrderCreationService.Application.Contracts.Products;
 using OrderCreationService.Application.Models.Models;
 using Products.CreationService.Contracts;
 
@@ -12,13 +12,6 @@ public class ProductController : ProductService.ProductServiceBase
     public ProductController(IProductService productService)
     {
         _productService = productService;
-    }
-
-    public override async Task<GetProductResponse> GetProduct(GetProductRequest request, ServerCallContext context)
-    {
-        Product product = await _productService.GetProductAsync(request.Id, context.CancellationToken);
-        var dto = new ProductDto { Name = product.Name, Price = (double)product.Price };
-        return new GetProductResponse { Product = dto };
     }
 
     public override async Task<AddProductsResponse> AddProducts(AddProductsRequest request, ServerCallContext context)
@@ -38,7 +31,7 @@ public class ProductController : ProductService.ProductServiceBase
 
     public override async Task QueryProducts(ProductQuery request, IServerStreamWriter<ProductDto> responseStream, ServerCallContext context)
     {
-        var query = new Application.Abstractions.Queries.ProductQuery(
+        var applicationRequest = new QueryProducts.Request(
             request.Ids.ToArray(),
             request.NamePattern,
             (decimal?)request.MinPrice,
@@ -46,7 +39,7 @@ public class ProductController : ProductService.ProductServiceBase
             request.Cursor,
             request.PageSize);
 
-        await foreach (Product product in _productService.QueryProductsAsync(query, context.CancellationToken))
+        await foreach (Product product in _productService.QueryProductsAsync(applicationRequest, context.CancellationToken))
         {
             await responseStream.WriteAsync(
                 new ProductDto
