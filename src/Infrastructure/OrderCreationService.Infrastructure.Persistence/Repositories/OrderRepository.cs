@@ -3,7 +3,6 @@ using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
-using OrderCreationService.Infrastructure.Persistence.Exceptions;
 using OrderCreationService.Infrastructure.Persistence.Extensions;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -17,38 +16,6 @@ public class OrderRepository : IOrderRepository
     public OrderRepository(NpgsqlDataSource dataSource)
     {
         _dataSource = dataSource;
-    }
-
-    public async Task<Order> GetOrderAsync(long orderId, CancellationToken cancellationToken)
-    {
-        const string sql = """
-        select order_id,
-               order_state,
-               order_created_at,
-               order_created_by
-        from orders
-        where order_id = :orderId 
-        """;
-
-        await using NpgsqlConnection connection = await _dataSource.OpenConnectionAsync(cancellationToken);
-
-        await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
-            .AddParameter("orderId", orderId);
-
-        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
-
-        if (await reader.ReadAsync(cancellationToken))
-        {
-            OrderState state = await reader.GetFieldValueAsync<OrderState>("order_state", cancellationToken);
-
-            return new Order(
-                reader.GetInt64("order_id"),
-                state,
-                reader.GetDateTime("order_created_at"),
-                reader.GetString("order_created_by"));
-        }
-
-        throw new OrderNotFoundException("Order Not Found");
     }
 
     public async Task<long[]> AddOrdersAsync(IReadOnlyCollection<Order> orders, CancellationToken cancellationToken)

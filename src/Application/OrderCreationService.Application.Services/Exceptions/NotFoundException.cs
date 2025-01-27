@@ -1,4 +1,4 @@
-namespace OrderCreationService.Infrastructure.Persistence.Exceptions;
+namespace OrderCreationService.Application.Services.Exceptions;
 
 public class NotFoundException : Exception
 {

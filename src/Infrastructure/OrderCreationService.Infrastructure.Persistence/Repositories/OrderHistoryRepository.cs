@@ -53,7 +53,7 @@ public class OrderHistoryRepository : IOrderHistoryRepository
         where (order_history_item_id > :cursor)
           and (cardinality(:ids) = 0 or order_history_item_id = any (:ids))
           and (:order_ids::bigint[] is null or cardinality(:order_ids) = 0 or order_id = any (:order_ids))
-          and (:kind::order_history_item_kind is null or order_history_item_kind = :kind::order_history_item_kind)
+          and (:item_kind::order_history_item_kind is null or order_history_item_kind = :item_kind::order_history_item_kind)
         limit :page_size;
         """;
 
@@ -62,7 +62,7 @@ public class OrderHistoryRepository : IOrderHistoryRepository
         await using DbCommand command = new NpgsqlCommand(sql, connection)
             .AddParameter("ids", query.Ids)
             .AddParameter("order_ids", query.OrderIds)
-            .AddParameter("kind", query.Kind)
+            .AddParameter("item_kind", query.ItemKind)
             .AddParameter("cursor", query.Cursor)
             .AddParameter("page_size", query.PageSize);
 
@@ -70,7 +70,7 @@ public class OrderHistoryRepository : IOrderHistoryRepository
 
         while (await reader.ReadAsync(cancellationToken))
         {
-            OrderHistoryItemKind kind = await reader.GetFieldValueAsync<OrderHistoryItemKind>("order_history_item_kind", cancellationToken);
+            OrderHistoryItemKind itemKind = await reader.GetFieldValueAsync<OrderHistoryItemKind>("order_history_item_kind", cancellationToken);
 
             string payloadJson = reader.GetString("order_history_item_payload");
 
@@ -81,7 +81,7 @@ public class OrderHistoryRepository : IOrderHistoryRepository
                 reader.GetInt64("order_history_item_id"),
                 reader.GetInt64("order_id"),
                 reader.GetDateTime("order_history_item_created_at"),
-                kind,
+                itemKind,
                 payload);
         }
     }

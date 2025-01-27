@@ -2,7 +2,6 @@ using Npgsql;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Models.Models;
-using OrderCreationService.Infrastructure.Persistence.Exceptions;
 using OrderCreationService.Infrastructure.Persistence.Extensions;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -41,34 +40,6 @@ public class ProductRepository : IProductRepository
         while (await reader.ReadAsync(cancellationToken)) ids.Add(reader.GetInt64("product_id"));
 
         return ids.ToArray();
-    }
-
-    public async Task<Product> GetProductAsync(long productId, CancellationToken cancellationToken)
-    {
-        const string sql = """
-        select product_id, 
-               product_name, 
-               product_price
-        from products
-        where product_id = :productId
-        """;
-
-        await using NpgsqlConnection connection = await _dataSource.OpenConnectionAsync(cancellationToken);
-
-        await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
-            .AddParameter("productId", productId);
-
-        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
-
-        if (await reader.ReadAsync(cancellationToken))
-        {
-            return new Product(
-                reader.GetInt64("product_id"),
-                reader.GetString("product_name"),
-                reader.GetDecimal("product_price"));
-        }
-
-        throw new ProductNotFoundException("Product Not Found");
     }
 
     public async IAsyncEnumerable<Product> QueryProductsAsync(ProductQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)

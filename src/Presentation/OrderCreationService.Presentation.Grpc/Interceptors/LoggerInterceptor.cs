@@ -2,7 +2,6 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
 using OrderCreationService.Application.Services.Exceptions;
-using OrderCreationService.Infrastructure.Persistence.Exceptions;
 
 namespace OrderCreationService.Presentation.Grpc.Interceptors;
 

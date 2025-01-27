@@ -6,8 +6,6 @@ namespace OrderCreationService.Application.Abstractions.Repositories;
 
 public interface IOrderRepository
 {
-    Task<Order> GetOrderAsync(long orderId, CancellationToken cancellationToken);
-
     Task<long[]> AddOrdersAsync(IReadOnlyCollection<Order> orders, CancellationToken cancellationToken);
 
     Task UpdateOrderStateAsync(long orderId, OrderState newState, CancellationToken cancellationToken);

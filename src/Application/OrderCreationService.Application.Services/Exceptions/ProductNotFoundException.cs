@@ -1,4 +1,4 @@
-namespace OrderCreationService.Infrastructure.Persistence.Exceptions;
+namespace OrderCreationService.Application.Services.Exceptions;
 
 public sealed class ProductNotFoundException : NotFoundException
 {

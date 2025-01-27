@@ -98,25 +98,35 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken);
+        var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
+
+        Order order = await _orderRepository
+            .QueryOrdersAsync(orderQuery, cancellationToken)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new OrderNotFoundException("Order not found.");
 
         if (order.OrderState != OrderState.Created)
             throw new InvalidOrderStateException($"Cannot add products to an order of state: {order.OrderState}");
 
-        foreach (AddProductToOrderDto product in products)
+        foreach (AddProductToOrderDto dto in products)
         {
-            _ = await _productRepository.GetProductAsync(product.ProductId, cancellationToken);
+            var productQuery = new ProductQuery([dto.ProductId], null, null, null, 0, 1);
+
+            Product product = await _productRepository
+                .QueryProductsAsync(productQuery, cancellationToken)
+                .SingleOrDefaultAsync(cancellationToken)
+                ?? throw new ProductNotFoundException("Product not found.");
 
             var orderItem = new OrderItem(
                 OrderItemId: default,
                 OrderId: order.OrderId,
-                ProductId: product.ProductId,
-                OrderItemQuantity: product.Quantity,
+                ProductId: dto.ProductId,
+                OrderItemQuantity: dto.Quantity,
                 OrderItemDeleted: false);
 
             await _orderItemsRepository.AddOrderItemAsync(orderItem, cancellationToken);
 
-            var payload = new AddProductToOrderPayload(product.ProductId, product.Quantity);
+            var payload = new AddProductToOrderPayload(dto.ProductId, dto.Quantity);
 
             var historyItem = new OrderHistoryItem(
                 OrderHistoryItemId: default,
@@ -138,14 +148,24 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken);
+        var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
+
+        Order order = await _orderRepository
+            .QueryOrdersAsync(orderQuery, cancellationToken)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new OrderNotFoundException("Order not found.");
 
         if (order.OrderState != OrderState.Created)
             throw new InvalidOrderStateException($"Cannot remove products from an order of state: {order.OrderState}");
 
         foreach (long productId in productIds)
         {
-            _ = await _productRepository.GetProductAsync(productId, cancellationToken);
+            var productQuery = new ProductQuery([productId], null, null, null, 0, 1);
+
+            Product product = await _productRepository
+                .QueryProductsAsync(productQuery, cancellationToken)
+                .SingleOrDefaultAsync(cancellationToken)
+                ?? throw new ProductNotFoundException("Product not found.");
 
             await _orderItemsRepository.SoftDeleteItemAsync(orderId, productId, cancellationToken);
 
@@ -168,7 +188,12 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken);
+        var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
+
+        Order order = await _orderRepository
+            .QueryOrdersAsync(orderQuery, cancellationToken)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new OrderNotFoundException("Order not found.");
 
         if (order.OrderState != OrderState.Created)
             throw new InvalidOrderStateException($"Cannot start order processing for order of state: {order.OrderState}, only of state {OrderState.Created}");
@@ -214,7 +239,12 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken);
+        var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
+
+        Order order = await _orderRepository
+            .QueryOrdersAsync(orderQuery, cancellationToken)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new OrderNotFoundException("Order not found.");
 
         if (order.OrderState != OrderState.Processing)
             throw new InvalidOrderStateException($"Cannot complete order of state: {order.OrderState}, only of state {OrderState.Processing}");
@@ -239,7 +269,12 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        Order order = await _orderRepository.GetOrderAsync(orderId, cancellationToken);
+        var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
+
+        Order order = await _orderRepository
+            .QueryOrdersAsync(orderQuery, cancellationToken)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new OrderNotFoundException("Order not found.");
 
         if (order.OrderState != OrderState.Created)
             throw new InvalidOrderStateException($"Cannot cancel order of state: {order.OrderState}, only of state {OrderState.Created}");
