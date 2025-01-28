@@ -16,4 +16,4 @@ WebApplication app = builder.Build();
 app.UseRouting();
 app.UsePresentationGrpc();
 
-app.Run();
+await app.RunAsync();
