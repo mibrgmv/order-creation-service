@@ -7,7 +7,7 @@ namespace OrderCreationService.Application.Services.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddApplication(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IProductService, ProductService>();
         serviceCollection.AddScoped<IOrderService, OrderService>();

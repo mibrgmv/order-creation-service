@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Infrastructure\OrderCreationService.Infrastructure.Persistence\OrderCreationService.Infrastructure.Persistence.csproj" />
+      <ProjectReference Include="..\Presentation\OrderCreationService.Presentation.Grpc\OrderCreationService.Presentation.Grpc.csproj" />
+    </ItemGroup>
+
+</Project>

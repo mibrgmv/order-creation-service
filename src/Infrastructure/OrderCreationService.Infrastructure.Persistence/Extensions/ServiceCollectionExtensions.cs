@@ -10,19 +10,23 @@ namespace OrderCreationService.Infrastructure.Persistence.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddPersistence(this IServiceCollection collection)
     {
-        serviceCollection
-            .AddScoped<NpgsqlDataSource>(sp =>
-            {
-                PersistenceOptions options = sp.GetRequiredService<IOptionsSnapshot<PersistenceOptions>>().Value;
-                var dataSourceBuilder = new NpgsqlDataSourceBuilder(options.ConnectionString);
-                dataSourceBuilder.MapEnum<OrderState>(pgName: "order_state");
-                dataSourceBuilder.MapEnum<OrderHistoryItemKind>(pgName: "order_history_item_kind");
-                return dataSourceBuilder.Build();
-            });
+        collection.AddOptions<PersistenceOptions>().BindConfiguration(nameof(PersistenceOptions));
 
-        serviceCollection
+        collection.AddScoped<NpgsqlDataSource>(sp =>
+        {
+            PersistenceOptions options = sp.GetRequiredService<IOptionsSnapshot<PersistenceOptions>>().Value;
+
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(options.ConnectionString);
+
+            dataSourceBuilder.MapEnum<OrderState>(pgName: "order_state");
+            dataSourceBuilder.MapEnum<OrderHistoryItemKind>(pgName: "order_history_item_kind");
+
+            return dataSourceBuilder.Build();
+        });
+
+        collection
             .AddFluentMigratorCore()
             .ConfigureRunner(rb => rb
                 .AddPostgres()
@@ -34,12 +38,12 @@ public static class ServiceCollectionExtensions
                 .ScanIn(typeof(IAssemblyMarker).Assembly).For.Migrations())
             .AddLogging(lb => lb.AddFluentMigratorConsole());
 
-        serviceCollection
+        collection
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IOrderRepository, OrderRepository>()
             .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
             .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
 
-        return serviceCollection;
+        return collection;
     }
 }
