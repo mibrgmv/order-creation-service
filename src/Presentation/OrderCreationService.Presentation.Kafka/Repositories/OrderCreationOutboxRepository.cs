@@ -1,6 +1,6 @@
 using Google.Protobuf;
-using Kafka.Abstractions.Producer.Outbox;
 using Npgsql;
+using OrderCreationService.Infrastructure.Kafka.Producer.Outbox;
 using OrderCreationService.Presentation.Kafka.Extensions;
 using Orders.Kafka.Contracts;
 using System.Data;

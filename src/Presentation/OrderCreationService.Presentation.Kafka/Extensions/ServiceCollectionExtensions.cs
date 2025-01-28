@@ -1,6 +1,6 @@
-using Kafka.Abstractions.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderCreationService.Infrastructure.Kafka.Extensions;
 using OrderCreationService.Presentation.Kafka.ConsumerHandlers;
 using OrderCreationService.Presentation.Kafka.Repositories;
 using Orders.Kafka.Contracts;

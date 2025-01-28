@@ -1,5 +1,4 @@
 using Google.Protobuf.WellKnownTypes;
-using Kafka.Abstractions.Producer.Outbox;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Contracts.Orders;
@@ -9,6 +8,7 @@ using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Application.Services.Exceptions;
+using OrderCreationService.Infrastructure.Kafka.Producer.Outbox;
 using Orders.Kafka.Contracts;
 using System.Transactions;
 

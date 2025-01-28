@@ -1,8 +1,8 @@
-using Kafka.Abstractions.Consumer;
-using Kafka.Abstractions.Consumer.Models;
 using Microsoft.Extensions.Logging;
 using OrderCreationService.Application.Contracts.Orders;
 using OrderCreationService.Application.Models.Enums;
+using OrderCreationService.Infrastructure.Kafka.Consumer;
+using OrderCreationService.Infrastructure.Kafka.Consumer.Models;
 using Orders.Kafka.Contracts;
 
 namespace OrderCreationService.Presentation.Kafka.ConsumerHandlers;
