@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Builder;
-using OrderCreationService.Presentation.Grpc.Services;
+using OrderCreationService.Presentation.Grpc.Controllers;
 
 namespace OrderCreationService.Presentation.Grpc.Extensions;
 

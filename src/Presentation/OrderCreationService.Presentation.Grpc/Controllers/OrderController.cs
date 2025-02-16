@@ -8,7 +8,7 @@ using Orders.CreationService.Contracts;
 using AddOrderDto = OrderCreationService.Application.Contracts.Requests.AddOrderDto;
 using AddProductToOrderDto = OrderCreationService.Application.Contracts.Requests.AddProductToOrderDto;
 
-namespace OrderCreationService.Presentation.Grpc.Services;
+namespace OrderCreationService.Presentation.Grpc.Controllers;
 
 public class OrderController : OrderService.OrderServiceBase
 {

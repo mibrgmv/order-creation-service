@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="protos\*.proto" GrpcServices="None" />
+        <Protobuf Include="Protos\*.proto" GrpcServices="None" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using OrderCreationService.Application.Contracts.Products;
 using OrderCreationService.Application.Models.Models;
 using Products.CreationService.Contracts;
 
-namespace OrderCreationService.Presentation.Grpc.Services;
+namespace OrderCreationService.Presentation.Grpc.Controllers;
 
 public class ProductController : ProductService.ProductServiceBase
 {

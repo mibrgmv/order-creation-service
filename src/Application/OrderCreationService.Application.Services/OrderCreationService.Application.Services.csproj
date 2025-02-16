@@ -12,8 +12,4 @@
       <PackageReference Include="Google.Protobuf" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Protobuf Include="protos\*.proto" GrpcServices="None" />
-    </ItemGroup>
-
 </Project>
