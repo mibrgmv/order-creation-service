@@ -9,7 +9,6 @@ public static class ApplicationBuilderExtensions
     {
         builder.UseEndpoints(routeBuilder =>
         {
-            routeBuilder.MapGrpcService<ProductController>();
             routeBuilder.MapGrpcService<OrderController>();
             routeBuilder.MapGrpcReflectionService();
         });

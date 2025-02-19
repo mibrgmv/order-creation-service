@@ -39,7 +39,6 @@ public static class ServiceCollectionExtensions
             .AddLogging(lb => lb.AddFluentMigratorConsole());
 
         collection
-            .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IOrderRepository, OrderRepository>()
             .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
             .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();

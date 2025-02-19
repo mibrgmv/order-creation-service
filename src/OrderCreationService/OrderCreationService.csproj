@@ -2,14 +2,15 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
+      <ProjectReference Include="..\Presentation\OrderCreationService.Presentation.Grpc\OrderCreationService.Presentation.Grpc.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Presentation\OrderCreationService.Presentation.Grpc\OrderCreationService.Presentation.Grpc.csproj" />
+        <Content Include="appsettings*.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content> 
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package products;
+package product;
 
-option csharp_namespace = "Products.CreationService.Contracts";
+option csharp_namespace = "Products.ProductService.Contracts";
 
 import "google/protobuf/wrappers.proto";
 
@@ -11,13 +11,8 @@ service ProductService {
   rpc QueryProducts(ProductQuery) returns (stream ProductDto);
 }
 
-message AddProductDto {
-  string name = 1;
-  double price = 2;
-}
-
 message AddProductsRequest {
-  repeated AddProductDto products = 1;
+  repeated ProductDto products = 1;
 }
 
 message AddProductsResponse {

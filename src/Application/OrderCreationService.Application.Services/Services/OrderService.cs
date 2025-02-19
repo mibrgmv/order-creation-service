@@ -1,4 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using OrderCreationService.Application.Abstractions.Queries;
 using OrderCreationService.Application.Abstractions.Repositories;
 using OrderCreationService.Application.Contracts.Orders;
@@ -10,6 +11,7 @@ using OrderCreationService.Application.Models.Payloads;
 using OrderCreationService.Application.Services.Exceptions;
 using OrderCreationService.Infrastructure.Kafka.Producer.Outbox;
 using Orders.Kafka.Contracts;
+using Products.ProductService.Contracts;
 using System.Transactions;
 
 namespace OrderCreationService.Application.Services.Services;
@@ -17,23 +19,23 @@ namespace OrderCreationService.Application.Services.Services;
 internal sealed class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
-    private readonly IProductRepository _productRepository;
     private readonly IOrderItemsRepository _orderItemsRepository;
     private readonly IOrderHistoryRepository _orderHistoryRepository;
     private readonly IOutboxRepository<OrderCreationKey, OrderCreationValue> _outboxRepository;
+    private readonly ProductService.ProductServiceClient _productService;
 
     public OrderService(
         IOrderRepository orderRepository,
-        IProductRepository productRepository,
         IOrderItemsRepository orderItemsRepository,
         IOrderHistoryRepository orderHistoryRepository,
-        IOutboxRepository<OrderCreationKey, OrderCreationValue> outboxRepository)
+        IOutboxRepository<OrderCreationKey, OrderCreationValue> outboxRepository,
+        ProductService.ProductServiceClient productService)
     {
         _orderRepository = orderRepository;
-        _productRepository = productRepository;
         _orderItemsRepository = orderItemsRepository;
         _orderHistoryRepository = orderHistoryRepository;
         _outboxRepository = outboxRepository;
+        _productService = productService;
     }
 
     public async Task<long[]> AddOrdersAsync(
@@ -110,12 +112,18 @@ internal sealed class OrderService : IOrderService
 
         foreach (AddProductToOrderDto dto in products)
         {
-            var productQuery = new ProductQuery([dto.ProductId], null, null, null, 0, 1);
+            var request = new ProductQuery
+            {
+                Ids = { dto.ProductId },
+                Cursor = 0,
+                PageSize = 1,
+            };
 
-            Product product = await _productRepository
-                .QueryProductsAsync(productQuery, cancellationToken)
-                .SingleOrDefaultAsync(cancellationToken)
-                ?? throw new ProductNotFoundException("Product not found.");
+            if (!await _productService.QueryProducts(request, cancellationToken: cancellationToken)
+                    .ResponseStream.ReadAllAsync(cancellationToken).AnyAsync(cancellationToken))
+            {
+                throw new ProductNotFoundException("Product not found.");
+            }
 
             var orderItem = new OrderItem(
                 OrderItemId: default,
@@ -160,12 +168,18 @@ internal sealed class OrderService : IOrderService
 
         foreach (long productId in productIds)
         {
-            var productQuery = new ProductQuery([productId], null, null, null, 0, 1);
+            var request = new ProductQuery
+            {
+                Ids = { productId },
+                Cursor = 0,
+                PageSize = 1,
+            };
 
-            Product product = await _productRepository
-                .QueryProductsAsync(productQuery, cancellationToken)
-                .SingleOrDefaultAsync(cancellationToken)
-                ?? throw new ProductNotFoundException("Product not found.");
+            if (!await _productService.QueryProducts(request, cancellationToken: cancellationToken)
+                    .ResponseStream.ReadAllAsync(cancellationToken).AnyAsync(cancellationToken))
+            {
+                throw new ProductNotFoundException("Product not found.");
+            }
 
             await _orderItemsRepository.SoftDeleteItemAsync(orderId, productId, cancellationToken);
 

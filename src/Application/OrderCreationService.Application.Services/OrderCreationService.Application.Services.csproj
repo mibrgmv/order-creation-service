@@ -9,7 +9,11 @@
 
     <ItemGroup>
       <PackageReference Include="Grpc.Tools" />
-      <PackageReference Include="Google.Protobuf" />
+      <PackageReference Include="Grpc.AspNetCore"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\*.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>
