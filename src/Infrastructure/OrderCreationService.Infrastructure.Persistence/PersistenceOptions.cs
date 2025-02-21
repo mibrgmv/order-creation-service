@@ -1,6 +1,6 @@
 namespace OrderCreationService.Infrastructure.Persistence;
 
-public sealed class PersistenceOptions
+public class PersistenceOptions
 {
     public string Host { get; set; } = string.Empty;
 
@@ -12,5 +12,12 @@ public sealed class PersistenceOptions
 
     public string Password { get; set; } = string.Empty;
 
-    public string ConnectionString => $"Host={Host};Port={Port};Database={Database};Username={Username};Password={Password}";
+    public string SslMode { get; set; } = string.Empty;
+
+    public string ConnectionString => $"Host={Host};" +
+                                      $"Port={Port};" +
+                                      $"Database={Database};" +
+                                      $"Username={Username};" +
+                                      $"Password={Password};" +
+                                      $"Ssl Mode={SslMode};";
 }

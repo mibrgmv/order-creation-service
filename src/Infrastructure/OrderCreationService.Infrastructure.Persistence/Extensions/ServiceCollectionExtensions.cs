@@ -10,9 +10,11 @@ namespace OrderCreationService.Infrastructure.Persistence.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection collection)
+    public static IServiceCollection AddPersistencePostgres(this IServiceCollection collection)
     {
-        collection.AddOptions<PersistenceOptions>().BindConfiguration(nameof(PersistenceOptions));
+        const string configurationKey = "Postgres";
+
+        collection.AddOptions<PersistenceOptions>().BindConfiguration(configurationKey);
 
         collection.AddScoped<NpgsqlDataSource>(sp =>
         {
@@ -27,6 +29,16 @@ public static class ServiceCollectionExtensions
         });
 
         collection
+            .AddScoped<IOrderRepository, OrderRepository>()
+            .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
+            .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+
+        return collection;
+    }
+
+    public static IServiceCollection AddPersistenceMigrations(this IServiceCollection collection)
+    {
+        collection
             .AddFluentMigratorCore()
             .ConfigureRunner(rb => rb
                 .AddPostgres()
@@ -38,10 +50,7 @@ public static class ServiceCollectionExtensions
                 .ScanIn(typeof(IAssemblyMarker).Assembly).For.Migrations())
             .AddLogging(lb => lb.AddFluentMigratorConsole());
 
-        collection
-            .AddScoped<IOrderRepository, OrderRepository>()
-            .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
-            .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+        collection.AddHostedService<MigrationRunnerBackgroundService>();
 
         return collection;
     }
