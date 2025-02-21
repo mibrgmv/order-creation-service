@@ -1,19 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Infrastructure\OrderCreationService.Infrastructure.Kafka\OrderCreationService.Infrastructure.Kafka.csproj" />
-      <ProjectReference Include="..\..\Presentation\OrderCreationService.Presentation.Kafka\OrderCreationService.Presentation.Kafka.csproj" />
-      <ProjectReference Include="..\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj" />
-      <ProjectReference Include="..\OrderCreationService.Application.Contracts\OrderCreationService.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\OrderCreationService.Infrastructure.Kafka\OrderCreationService.Infrastructure.Kafka.csproj" />
+        <ProjectReference Include="..\..\Presentation\OrderCreationService.Presentation.Kafka\OrderCreationService.Presentation.Kafka.csproj" />
+        <ProjectReference Include="..\OrderCreationService.Application.Abstractions\OrderCreationService.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\OrderCreationService.Application.Contracts\OrderCreationService.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.Tools" />
-      <PackageReference Include="Grpc.AspNetCore"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Protobuf Include="Protos\*.proto" GrpcServices="Client" />
+        <PackageReference Include="Grpc.Tools" />
+        <PackageReference Include="Google.Protobuf" />
     </ItemGroup>
 
 </Project>

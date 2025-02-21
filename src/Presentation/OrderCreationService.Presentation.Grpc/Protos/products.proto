@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package product;
 
-option csharp_namespace = "Products.ProductService.Contracts";
+option csharp_namespace = "Products.CreationService.Contracts";
 
 import "google/protobuf/wrappers.proto";
 

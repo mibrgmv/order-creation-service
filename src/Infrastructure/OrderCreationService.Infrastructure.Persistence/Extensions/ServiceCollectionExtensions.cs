@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         });
 
         collection
+            .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IOrderRepository, OrderRepository>()
             .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
             .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();

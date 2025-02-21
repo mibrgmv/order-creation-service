@@ -16,6 +16,8 @@ COPY ["src/Application/OrderCreationService.Application.Contracts/OrderCreationS
 COPY ["src/Presentation/OrderCreationService.Presentation.Kafka/OrderCreationService.Presentation.Kafka.csproj", "src/Presentation/OrderCreationService.Presentation.Kafka/"]
 COPY ["src/Infrastructure/OrderCreationService.Infrastructure.Kafka/OrderCreationService.Infrastructure.Kafka.csproj", "src/Infrastructure/OrderCreationService.Infrastructure.Kafka/"]
 COPY ["src/Infrastructure/OrderCreationService.Infrastructure.Persistence/OrderCreationService.Infrastructure.Persistence.csproj", "src/Infrastructure/OrderCreationService.Infrastructure.Persistence/"]
+COPY ["Directory.Build.props", "."]
+COPY ["Directory.Packages.props", "."]
 RUN dotnet restore "src/OrderCreationService/OrderCreationService.csproj"
 COPY . .
 WORKDIR "/src/src/OrderCreationService"
