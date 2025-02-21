@@ -78,7 +78,7 @@ internal sealed class InboxMessageProcessor<TKey, TValue> : BackgroundService
                             inboxMessage.MessageId);
 
                         await inboxRepository.AddOrUpdateAsync(
-                            inboxMessage with { ProcessedAt = DateTime.UtcNow },
+                            inboxMessage with { ProcessedAt = DateTimeOffset.UtcNow },
                             stoppingToken);
                     }
 

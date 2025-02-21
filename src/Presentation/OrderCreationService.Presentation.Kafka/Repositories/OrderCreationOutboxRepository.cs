@@ -80,7 +80,7 @@ public class OrderCreationOutboxRepository : IOutboxRepository<OrderCreationKey,
                 MessageType: reader.GetString("message_type"),
                 MessageKey: deserializedKey,
                 MessageValue: deserializedValue,
-                CreatedAt: reader.GetDateTime("message_created_at"),
+                CreatedAt: await reader.GetFieldValueAsync<DateTimeOffset>("message_created_at", cancellationToken),
                 ProcessedAt: null);
         }
     }

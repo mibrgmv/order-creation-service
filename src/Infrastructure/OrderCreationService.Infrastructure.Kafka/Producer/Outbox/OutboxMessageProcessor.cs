@@ -81,7 +81,7 @@ internal sealed class OutboxMessageProcessor<TKey, TValue> : BackgroundService
                             outboxMessage.MessageType);
 
                         await outboxRepository.AddOrUpdateAsync(
-                            outboxMessage with { ProcessedAt = DateTime.UtcNow },
+                            outboxMessage with { ProcessedAt = DateTimeOffset.UtcNow },
                             stoppingToken);
                     }
 

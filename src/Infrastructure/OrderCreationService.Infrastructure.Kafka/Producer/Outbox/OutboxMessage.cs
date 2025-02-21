@@ -5,5 +5,5 @@ public record OutboxMessage<TKey, TValue>(
     string MessageType,
     TKey MessageKey,
     TValue MessageValue,
-    DateTime CreatedAt,
-    DateTime? ProcessedAt);
+    DateTimeOffset CreatedAt,
+    DateTimeOffset? ProcessedAt);

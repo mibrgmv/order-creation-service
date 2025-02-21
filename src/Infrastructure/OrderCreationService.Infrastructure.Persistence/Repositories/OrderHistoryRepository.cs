@@ -78,11 +78,11 @@ public class OrderHistoryRepository : IOrderHistoryRepository
                                   ?? throw new InvalidOperationException("Payload deserialization error");
 
             yield return new OrderHistoryItem(
-                reader.GetInt64("order_history_item_id"),
-                reader.GetInt64("order_id"),
-                reader.GetDateTime("order_history_item_created_at"),
-                itemKind,
-                payload);
+                OrderHistoryItemId: reader.GetInt64("order_history_item_id"),
+                OrderId: reader.GetInt64("order_id"),
+                OrderHistoryItemCreatedAt: await reader.GetFieldValueAsync<DateTimeOffset>("order_history_item_created_at", cancellationToken: cancellationToken),
+                OrderHistoryItemKind: itemKind,
+                Payload: payload);
         }
     }
 }

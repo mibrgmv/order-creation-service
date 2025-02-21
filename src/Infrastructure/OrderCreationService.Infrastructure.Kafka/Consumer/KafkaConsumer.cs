@@ -76,7 +76,7 @@ internal sealed class KafkaConsumer<TKey, TValue> : BackgroundService
             MessageId: default,
             MessageKey: result.Message.Key,
             MessageValue: result.Message.Value,
-            CreatedAt: DateTime.UtcNow,
+            CreatedAt: DateTimeOffset.UtcNow,
             ProcessedAt: null);
 
         await _inboxRepository.AddOrUpdateAsync(inboxMessage, stoppingToken);

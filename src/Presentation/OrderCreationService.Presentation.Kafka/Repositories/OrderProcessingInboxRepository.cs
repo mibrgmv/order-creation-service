@@ -77,7 +77,7 @@ public class OrderProcessingInboxRepository : IInboxRepository<OrderProcessingKe
                 MessageId: reader.GetInt64("message_id"),
                 MessageKey: deserializedKey,
                 MessageValue: deserializedValue,
-                CreatedAt: reader.GetDateTime("message_created_at"),
+                CreatedAt: await reader.GetFieldValueAsync<DateTimeOffset>("message_created_at", cancellationToken: cancellationToken),
                 ProcessedAt: null);
         }
     }

@@ -95,10 +95,10 @@ public class OrderRepository : IOrderRepository
             OrderState state = await reader.GetFieldValueAsync<OrderState>("order_state", cancellationToken);
 
             yield return new Order(
-                reader.GetInt64("order_id"),
-                state,
-                reader.GetDateTime("order_created_at"),
-                reader.GetString("order_created_by"));
+                OrderId: reader.GetInt64("order_id"),
+                OrderState: state,
+                OrderCreatedAt: await reader.GetFieldValueAsync<DateTimeOffset>("order_created_at", cancellationToken),
+                OrderCreatedBy: reader.GetString("order_created_by"));
         }
     }
 }

@@ -47,7 +47,7 @@ internal sealed class OrderService : IOrderService
                 new Order(
                     OrderId: default,
                     OrderState: OrderState.Created,
-                    OrderCreatedAt: DateTime.UtcNow,
+                    OrderCreatedAt: DateTimeOffset.UtcNow,
                     OrderCreatedBy: x.OrderCreatedBy))
                 .ToList(),
             cancellationToken);
@@ -59,7 +59,7 @@ internal sealed class OrderService : IOrderService
             var item = new OrderHistoryItem(
                 OrderHistoryItemId: default,
                 OrderId: id,
-                OrderHistoryItemCreatedAt: DateTime.UtcNow,
+                OrderHistoryItemCreatedAt: DateTimeOffset.UtcNow,
                 OrderHistoryItemKind: OrderHistoryItemKind.Created,
                 Payload: payload);
 
@@ -72,7 +72,7 @@ internal sealed class OrderService : IOrderService
                 OrderCreated = new OrderCreationValue.Types.OrderCreated
                 {
                     OrderId = id,
-                    CreatedAt = DateTime.UtcNow.ToTimestamp(),
+                    CreatedAt = DateTimeOffset.UtcNow.ToTimestamp(),
                 },
             };
 
@@ -81,7 +81,7 @@ internal sealed class OrderService : IOrderService
                 MessageType: nameof(OrderCreationValue.Types.OrderCreated),
                 MessageKey: key,
                 MessageValue: value,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: DateTimeOffset.UtcNow,
                 ProcessedAt: null);
 
             await _outboxRepository.AddOrUpdateAsync(outboxMessage, cancellationToken);
@@ -131,7 +131,7 @@ internal sealed class OrderService : IOrderService
             var historyItem = new OrderHistoryItem(
                 OrderHistoryItemId: default,
                 OrderId: orderId,
-                OrderHistoryItemCreatedAt: DateTime.UtcNow,
+                OrderHistoryItemCreatedAt: DateTimeOffset.UtcNow,
                 OrderHistoryItemKind: OrderHistoryItemKind.ItemAdded,
                 Payload: payload);
 
@@ -174,7 +174,7 @@ internal sealed class OrderService : IOrderService
             var item = new OrderHistoryItem(
                 OrderHistoryItemId: default,
                 OrderId: order.OrderId,
-                OrderHistoryItemCreatedAt: DateTime.UtcNow,
+                OrderHistoryItemCreatedAt: DateTimeOffset.UtcNow,
                 OrderHistoryItemKind: OrderHistoryItemKind.ItemRemoved,
                 Payload: payload);
 
@@ -205,7 +205,7 @@ internal sealed class OrderService : IOrderService
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
             orderId,
-            DateTime.UtcNow,
+            DateTimeOffset.UtcNow,
             OrderHistoryItemKind.StateChanged,
             payload);
 
@@ -218,7 +218,7 @@ internal sealed class OrderService : IOrderService
             OrderProcessingStarted = new OrderCreationValue.Types.OrderProcessingStarted
             {
                 OrderId = order.OrderId,
-                StartedAt = DateTime.UtcNow.ToTimestamp(),
+                StartedAt = DateTimeOffset.UtcNow.ToTimestamp(),
             },
         };
 
@@ -227,7 +227,7 @@ internal sealed class OrderService : IOrderService
             MessageType: nameof(OrderCreationValue.Types.OrderProcessingStarted),
             MessageKey: key,
             MessageValue: value,
-            CreatedAt: DateTime.UtcNow,
+            CreatedAt: DateTimeOffset.UtcNow,
             ProcessedAt: null);
 
         await _outboxRepository.AddOrUpdateAsync(outboxMessage, cancellationToken);
@@ -256,7 +256,7 @@ internal sealed class OrderService : IOrderService
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
             orderId,
-            DateTime.UtcNow,
+            DateTimeOffset.UtcNow,
             OrderHistoryItemKind.StateChanged,
             payload);
 
@@ -286,7 +286,7 @@ internal sealed class OrderService : IOrderService
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
             orderId,
-            DateTime.UtcNow,
+            DateTimeOffset.UtcNow,
             OrderHistoryItemKind.StateChanged,
             payload);
 
@@ -305,7 +305,7 @@ internal sealed class OrderService : IOrderService
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
             orderId,
-            DateTime.UtcNow,
+            DateTimeOffset.UtcNow,
             OrderHistoryItemKind.StateChanged,
             payload);
 

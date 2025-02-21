@@ -6,6 +6,6 @@ namespace OrderCreationService.Application.Models.Models;
 public record OrderHistoryItem(
     long OrderHistoryItemId,
     long OrderId,
-    DateTime OrderHistoryItemCreatedAt,
+    DateTimeOffset OrderHistoryItemCreatedAt,
     OrderHistoryItemKind OrderHistoryItemKind,
     BasePayload Payload);
