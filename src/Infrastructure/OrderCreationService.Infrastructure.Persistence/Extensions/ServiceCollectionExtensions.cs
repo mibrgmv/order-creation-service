@@ -12,9 +12,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPersistencePostgres(this IServiceCollection collection)
     {
-        const string configurationKey = "Postgres";
+        const string postgresKey = "Postgres";
 
-        collection.AddOptions<PersistenceOptions>().BindConfiguration(configurationKey);
+        collection.AddOptions<PersistenceOptions>().BindConfiguration(postgresKey);
 
         collection.AddScoped<NpgsqlDataSource>(sp =>
         {
