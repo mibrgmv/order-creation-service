@@ -86,9 +86,9 @@ public class OrderController : OrderService.OrderServiceBase
             await responseStream.WriteAsync(
                 new OrderDto
                 {
-                OrderState = (OrderState)order.OrderState,
-                OrderCreatedAt = order.OrderCreatedAt.ToTimestamp(),
-                OrderCreatedBy = order.OrderCreatedBy,
+                    OrderState = (OrderState)order.OrderState,
+                    OrderCreatedAt = order.OrderCreatedAt.ToTimestamp(),
+                    OrderCreatedBy = order.OrderCreatedBy,
                 },
                 context.CancellationToken);
         }

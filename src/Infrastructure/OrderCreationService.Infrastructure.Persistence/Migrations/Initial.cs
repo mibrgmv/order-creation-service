@@ -2,8 +2,8 @@ using FluentMigrator;
 
 namespace OrderCreationService.Infrastructure.Persistence.Migrations;
 
-[Migration(1, nameof(InitialMigration))]
-public class InitialMigration : Migration
+[Migration(1, nameof(Initial))]
+public class Initial : Migration
 {
     public override void Up()
     {
@@ -61,6 +61,31 @@ public class InitialMigration : Migration
             order_history_item_kind       order_history_item_kind  not null,
             order_history_item_payload    jsonb                    not null
         );
+
+        create table outbox
+        (
+            message_id           bigint    primary key generated always as identity,
+            
+            message_type         text      not null,
+            message_key          bytea     not null,
+            message_value        bytea     not null,
+            message_created_at   timestamp with time zone not null,
+            message_processed_at timestamp with time zone
+        );
+        
+        create unique index inbox_key_value_idx on outbox (message_key, message_value);
+        
+        create table inbox
+        (
+            message_id           bigint    primary key generated always as identity,
+            
+            message_key          bytea     not null,
+            message_value        bytea     not null,
+            message_created_at   timestamp with time zone not null,
+            message_processed_at timestamp with time zone
+        );
+        
+        create unique index outbox_key_value_idx on inbox (message_key, message_value);
         """;
 
         Execute.Sql(sql);
@@ -76,6 +101,8 @@ public class InitialMigration : Migration
         drop table products;
         drop type order_history_item_kind;
         drop type order_state;
+        drop table inbox;
+        drop table outbox;
         """;
 
         Execute.Sql(sql);

@@ -318,7 +318,7 @@ internal sealed class OrderService : IOrderService
     {
         var query = new OrderQuery(
             Ids: request.Ids,
-            OrderState: request.OrderState,
+            OrderState: request.OrderState == OrderState.Unspecified ? null : request.OrderState,
             CreatedBy: request.CreatedBy,
             Cursor: request.Cursor,
             PageSize: request.PageSize);
