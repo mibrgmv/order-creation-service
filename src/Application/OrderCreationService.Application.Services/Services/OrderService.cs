@@ -1,9 +1,8 @@
 using Google.Protobuf.WellKnownTypes;
-using OrderCreationService.Application.Abstractions.Queries;
-using OrderCreationService.Application.Abstractions.Repositories;
+using OrderCreationService.Application.Abstractions.Persistence.Queries;
+using OrderCreationService.Application.Abstractions.Persistence.Repositories;
 using OrderCreationService.Application.Contracts.Orders;
-using OrderCreationService.Application.Contracts.Orders.Requests;
-using OrderCreationService.Application.Contracts.Requests;
+using OrderCreationService.Application.Contracts.Orders.Operations;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Application.Models.Payloads;
@@ -37,7 +36,7 @@ internal sealed class OrderService : IOrderService
     }
 
     public async Task<long[]> AddOrdersAsync(
-        IReadOnlyCollection<AddOrderDto> orders,
+        IReadOnlyCollection<AddOrder.Request> orders,
         CancellationToken cancellationToken)
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
@@ -52,7 +51,7 @@ internal sealed class OrderService : IOrderService
                 .ToList(),
             cancellationToken);
 
-        foreach ((long id, AddOrderDto order) in orderIds.Zip(orders))
+        foreach ((long id, AddOrder.Request order) in orderIds.Zip(orders))
         {
             var payload = new AddOrderPayload(order.OrderCreatedBy);
 
@@ -93,7 +92,7 @@ internal sealed class OrderService : IOrderService
 
     public async Task AddProductsToOrderAsync(
         long orderId,
-        IReadOnlyCollection<AddProductToOrderDto> products,
+        IReadOnlyCollection<AddProductToOrder.Request> products,
         CancellationToken cancellationToken)
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
@@ -108,7 +107,7 @@ internal sealed class OrderService : IOrderService
         if (order.OrderState != OrderState.Created)
             throw new InvalidOrderStateException($"Cannot add products to an order of state: {order.OrderState}");
 
-        foreach (AddProductToOrderDto dto in products)
+        foreach (AddProductToOrder.Request dto in products)
         {
             var productQuery = new ProductQuery([dto.ProductId], null, null, null, 0, 1);
 
@@ -300,14 +299,12 @@ internal sealed class OrderService : IOrderService
         OrderProcessingStatus status,
         CancellationToken cancellationToken)
     {
-        var payload = new OrderProcessingStatusPayload(status);
-
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
             orderId,
             DateTimeOffset.UtcNow,
             OrderHistoryItemKind.StateChanged,
-            payload);
+            new BasePayload());
 
         await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
     }

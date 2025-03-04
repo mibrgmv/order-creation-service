@@ -1,5 +1,6 @@
 using Grpc.Core;
 using OrderCreationService.Application.Contracts.Products;
+using OrderCreationService.Application.Contracts.Products.Operations;
 using OrderCreationService.Application.Models.Models;
 using Products.CreationService.Contracts;
 

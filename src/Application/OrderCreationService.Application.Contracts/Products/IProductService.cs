@@ -1,3 +1,4 @@
+using OrderCreationService.Application.Contracts.Products.Operations;
 using OrderCreationService.Application.Models.Models;
 
 namespace OrderCreationService.Application.Contracts.Products;

@@ -1,12 +1,10 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using OrderCreationService.Application.Contracts.Orders;
-using OrderCreationService.Application.Contracts.Orders.Requests;
+using OrderCreationService.Application.Contracts.Orders.Operations;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Presentation.Grpc.Extensions;
 using Orders.CreationService.Contracts;
-using AddOrderDto = OrderCreationService.Application.Contracts.Requests.AddOrderDto;
-using AddProductToOrderDto = OrderCreationService.Application.Contracts.Requests.AddProductToOrderDto;
 
 namespace OrderCreationService.Presentation.Grpc.Controllers;
 
@@ -23,12 +21,11 @@ public class OrderController : OrderService.OrderServiceBase
         AddOrdersRequest request,
         ServerCallContext context)
     {
-        var orders = new List<AddOrderDto>();
-
-        orders.AddRange(request.Orders.Select(x =>
-            new AddOrderDto(x.OrderCreatedBy)));
+        AddOrder.Request[] orders =
+            request.Orders.Select(x => new AddOrder.Request(x.OrderCreatedBy)).ToArray();
 
         long[] ids = await _orderService.AddOrdersAsync(orders, context.CancellationToken);
+
         return new AddOrdersResponse { OrdersIds = { ids } };
     }
 
@@ -36,12 +33,11 @@ public class OrderController : OrderService.OrderServiceBase
         AddProductsToOrderRequest request,
         ServerCallContext context)
     {
-        var products = new List<AddProductToOrderDto>();
-
-        products.AddRange(request.Products.Select(x =>
-            new AddProductToOrderDto(x.ProductId, x.Quantity)));
+        AddProductToOrder.Request[] products =
+            request.Products.Select(x => new AddProductToOrder.Request(x.ProductId, x.Quantity)).ToArray();
 
         await _orderService.AddProductsToOrderAsync(request.OrderId, products, context.CancellationToken);
+
         return new AddProductToOrderResponse();
     }
 

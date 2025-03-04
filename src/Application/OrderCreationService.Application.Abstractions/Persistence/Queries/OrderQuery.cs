@@ -1,10 +1,10 @@
 using OrderCreationService.Application.Models.Enums;
 
-namespace OrderCreationService.Application.Abstractions.Queries;
+namespace OrderCreationService.Application.Abstractions.Persistence.Queries;
 
 public record OrderQuery(
-    long[] Ids,
+    long[]? Ids,
     OrderState? OrderState,
     string? CreatedBy,
-    int Cursor,
+    long? Cursor,
     int PageSize);

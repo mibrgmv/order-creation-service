@@ -1,6 +1,7 @@
-using OrderCreationService.Application.Abstractions.Queries;
-using OrderCreationService.Application.Abstractions.Repositories;
+using OrderCreationService.Application.Abstractions.Persistence.Queries;
+using OrderCreationService.Application.Abstractions.Persistence.Repositories;
 using OrderCreationService.Application.Contracts.Products;
+using OrderCreationService.Application.Contracts.Products.Operations;
 using OrderCreationService.Application.Models.Models;
 
 namespace OrderCreationService.Application.Services.Services;

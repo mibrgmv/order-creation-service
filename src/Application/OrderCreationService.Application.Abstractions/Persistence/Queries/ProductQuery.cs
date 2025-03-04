@@ -1,9 +1,9 @@
-namespace OrderCreationService.Application.Abstractions.Queries;
+namespace OrderCreationService.Application.Abstractions.Persistence.Queries;
 
 public record ProductQuery(
-    long[] Ids,
+    long[]? Ids,
     string? NamePattern,
     decimal? MinPrice,
     decimal? MaxPrice,
-    int Cursor,
+    long? Cursor,
     int PageSize);

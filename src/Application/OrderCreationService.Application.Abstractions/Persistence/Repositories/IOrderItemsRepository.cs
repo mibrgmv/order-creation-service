@@ -1,7 +1,7 @@
-using OrderCreationService.Application.Abstractions.Queries;
+using OrderCreationService.Application.Abstractions.Persistence.Queries;
 using OrderCreationService.Application.Models.Models;
 
-namespace OrderCreationService.Application.Abstractions.Repositories;
+namespace OrderCreationService.Application.Abstractions.Persistence.Repositories;
 
 public interface IOrderItemsRepository
 {

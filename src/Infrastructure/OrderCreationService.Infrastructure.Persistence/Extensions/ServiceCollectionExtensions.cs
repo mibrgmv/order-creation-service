@@ -2,7 +2,8 @@ using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
-using OrderCreationService.Application.Abstractions.Repositories;
+using OrderCreationService.Application.Abstractions.Persistence;
+using OrderCreationService.Application.Abstractions.Persistence.Repositories;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Infrastructure.Persistence.Repositories;
 
@@ -28,11 +29,11 @@ public static class ServiceCollectionExtensions
             return dataSourceBuilder.Build();
         });
 
-        collection
-            .AddScoped<IProductRepository, ProductRepository>()
-            .AddScoped<IOrderRepository, OrderRepository>()
-            .AddScoped<IOrderItemsRepository, OrderItemsRepository>()
-            .AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+        collection.AddScoped<IPersistenceContext, PersistenceContext>();
+        collection.AddScoped<IProductRepository, ProductRepository>();
+        collection.AddScoped<IOrderRepository, OrderRepository>();
+        collection.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
+        collection.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
 
         return collection;
     }

@@ -1,6 +1,6 @@
 using Npgsql;
-using OrderCreationService.Application.Abstractions.Queries;
-using OrderCreationService.Application.Abstractions.Repositories;
+using OrderCreationService.Application.Abstractions.Persistence.Queries;
+using OrderCreationService.Application.Abstractions.Persistence.Repositories;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 using OrderCreationService.Infrastructure.Persistence.Extensions;

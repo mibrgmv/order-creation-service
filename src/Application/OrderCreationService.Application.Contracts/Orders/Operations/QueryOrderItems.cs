@@ -1,4 +1,4 @@
-namespace OrderCreationService.Application.Contracts.Orders.Requests;
+namespace OrderCreationService.Application.Contracts.Orders.Operations;
 
 public static class QueryOrderItems
 {

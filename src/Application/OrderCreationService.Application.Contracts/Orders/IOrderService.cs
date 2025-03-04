@@ -1,5 +1,4 @@
-using OrderCreationService.Application.Contracts.Orders.Requests;
-using OrderCreationService.Application.Contracts.Requests;
+using OrderCreationService.Application.Contracts.Orders.Operations;
 using OrderCreationService.Application.Models.Enums;
 using OrderCreationService.Application.Models.Models;
 
@@ -7,9 +6,9 @@ namespace OrderCreationService.Application.Contracts.Orders;
 
 public interface IOrderService
 {
-    Task<long[]> AddOrdersAsync(IReadOnlyCollection<AddOrderDto> orders, CancellationToken cancellationToken);
+    Task<long[]> AddOrdersAsync(IReadOnlyCollection<AddOrder.Request> orders, CancellationToken cancellationToken);
 
-    Task AddProductsToOrderAsync(long orderId, IReadOnlyCollection<AddProductToOrderDto> products, CancellationToken cancellationToken);
+    Task AddProductsToOrderAsync(long orderId, IReadOnlyCollection<AddProductToOrder.Request> products, CancellationToken cancellationToken);
 
     Task RemoveProductsFromOrderAsync(long orderId, long[] productIds, CancellationToken cancellationToken);
 

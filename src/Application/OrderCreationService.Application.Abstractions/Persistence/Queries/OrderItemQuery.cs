@@ -1,9 +1,9 @@
-namespace OrderCreationService.Application.Abstractions.Queries;
+namespace OrderCreationService.Application.Abstractions.Persistence.Queries;
 
 public record OrderItemQuery(
-    long[] Ids,
+    long[]? Ids,
     long[]? OrderIds,
     long[]? ProductIds,
     bool? Deleted,
-    int Cursor,
+    long? Cursor,
     int PageSize);
