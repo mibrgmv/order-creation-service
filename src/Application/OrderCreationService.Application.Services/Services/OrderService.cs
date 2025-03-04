@@ -1,6 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
+using OrderCreationService.Application.Abstractions.Persistence;
 using OrderCreationService.Application.Abstractions.Persistence.Queries;
-using OrderCreationService.Application.Abstractions.Persistence.Repositories;
 using OrderCreationService.Application.Contracts.Orders;
 using OrderCreationService.Application.Contracts.Orders.Operations;
 using OrderCreationService.Application.Models.Enums;
@@ -15,23 +15,14 @@ namespace OrderCreationService.Application.Services.Services;
 
 internal sealed class OrderService : IOrderService
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly IProductRepository _productRepository;
-    private readonly IOrderItemsRepository _orderItemsRepository;
-    private readonly IOrderHistoryRepository _orderHistoryRepository;
+    private readonly IPersistenceContext _context;
     private readonly IOutboxRepository<OrderCreationKey, OrderCreationValue> _outboxRepository;
 
     public OrderService(
-        IOrderRepository orderRepository,
-        IProductRepository productRepository,
-        IOrderItemsRepository orderItemsRepository,
-        IOrderHistoryRepository orderHistoryRepository,
+        IPersistenceContext context,
         IOutboxRepository<OrderCreationKey, OrderCreationValue> outboxRepository)
     {
-        _orderRepository = orderRepository;
-        _productRepository = productRepository;
-        _orderItemsRepository = orderItemsRepository;
-        _orderHistoryRepository = orderHistoryRepository;
+        _context = context;
         _outboxRepository = outboxRepository;
     }
 
@@ -41,7 +32,7 @@ internal sealed class OrderService : IOrderService
     {
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        long[] orderIds = await _orderRepository.AddOrdersAsync(
+        long[] orderIds = await _context.Orders.AddOrdersAsync(
             orders.Select(x =>
                 new Order(
                     OrderId: default,
@@ -62,7 +53,7 @@ internal sealed class OrderService : IOrderService
                 OrderHistoryItemKind: OrderHistoryItemKind.Created,
                 Payload: payload);
 
-            await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+            await _context.OrderHistory.AddItemAsync(item, cancellationToken);
 
             var key = new OrderCreationKey { OrderId = id };
 
@@ -99,7 +90,7 @@ internal sealed class OrderService : IOrderService
 
         var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
 
-        Order order = await _orderRepository
+        Order order = await _context.Orders
             .QueryOrdersAsync(orderQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken)
             ?? throw new OrderNotFoundException("Order not found.");
@@ -111,7 +102,7 @@ internal sealed class OrderService : IOrderService
         {
             var productQuery = new ProductQuery([dto.ProductId], null, null, null, 0, 1);
 
-            Product product = await _productRepository
+            _ = await _context.Products
                 .QueryProductsAsync(productQuery, cancellationToken)
                 .SingleOrDefaultAsync(cancellationToken)
                 ?? throw new ProductNotFoundException("Product not found.");
@@ -123,7 +114,7 @@ internal sealed class OrderService : IOrderService
                 OrderItemQuantity: dto.Quantity,
                 OrderItemDeleted: false);
 
-            await _orderItemsRepository.AddOrderItemAsync(orderItem, cancellationToken);
+            await _context.OrderItems.AddOrderItemAsync(orderItem, cancellationToken);
 
             var payload = new AddProductToOrderPayload(dto.ProductId, dto.Quantity);
 
@@ -134,7 +125,7 @@ internal sealed class OrderService : IOrderService
                 OrderHistoryItemKind: OrderHistoryItemKind.ItemAdded,
                 Payload: payload);
 
-            await _orderHistoryRepository.AddItemAsync(historyItem, cancellationToken);
+            await _context.OrderHistory.AddItemAsync(historyItem, cancellationToken);
         }
 
         transaction.Complete();
@@ -149,7 +140,7 @@ internal sealed class OrderService : IOrderService
 
         var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
 
-        Order order = await _orderRepository
+        Order order = await _context.Orders
             .QueryOrdersAsync(orderQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken)
             ?? throw new OrderNotFoundException("Order not found.");
@@ -161,12 +152,12 @@ internal sealed class OrderService : IOrderService
         {
             var productQuery = new ProductQuery([productId], null, null, null, 0, 1);
 
-            Product product = await _productRepository
+            _ = await _context.Products
                 .QueryProductsAsync(productQuery, cancellationToken)
                 .SingleOrDefaultAsync(cancellationToken)
                 ?? throw new ProductNotFoundException("Product not found.");
 
-            await _orderItemsRepository.SoftDeleteItemAsync(orderId, productId, cancellationToken);
+            await _context.OrderItems.SoftDeleteItemAsync(orderId, productId, cancellationToken);
 
             var payload = new RemoveProductFromOrderPayload(productId);
 
@@ -177,7 +168,7 @@ internal sealed class OrderService : IOrderService
                 OrderHistoryItemKind: OrderHistoryItemKind.ItemRemoved,
                 Payload: payload);
 
-            await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+            await _context.OrderHistory.AddItemAsync(item, cancellationToken);
         }
 
         transaction.Complete();
@@ -189,7 +180,7 @@ internal sealed class OrderService : IOrderService
 
         var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
 
-        Order order = await _orderRepository
+        Order order = await _context.Orders
             .QueryOrdersAsync(orderQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken)
             ?? throw new OrderNotFoundException("Order not found.");
@@ -199,7 +190,7 @@ internal sealed class OrderService : IOrderService
 
         var payload = new UpdateStatePayload(order.OrderState, OrderState.Processing);
 
-        await _orderRepository.UpdateOrderStateAsync(orderId, OrderState.Processing, cancellationToken);
+        await _context.Orders.UpdateOrderStateAsync(orderId, OrderState.Processing, cancellationToken);
 
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
@@ -208,7 +199,7 @@ internal sealed class OrderService : IOrderService
             OrderHistoryItemKind.StateChanged,
             payload);
 
-        await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+        await _context.OrderHistory.AddItemAsync(item, cancellationToken);
 
         var key = new OrderCreationKey { OrderId = order.OrderId };
 
@@ -240,7 +231,7 @@ internal sealed class OrderService : IOrderService
 
         var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
 
-        Order order = await _orderRepository
+        Order order = await _context.Orders
             .QueryOrdersAsync(orderQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken)
             ?? throw new OrderNotFoundException("Order not found.");
@@ -250,7 +241,7 @@ internal sealed class OrderService : IOrderService
 
         var payload = new UpdateStatePayload(order.OrderState, OrderState.Completed);
 
-        await _orderRepository.UpdateOrderStateAsync(orderId, OrderState.Completed, cancellationToken);
+        await _context.Orders.UpdateOrderStateAsync(orderId, OrderState.Completed, cancellationToken);
 
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
@@ -259,7 +250,7 @@ internal sealed class OrderService : IOrderService
             OrderHistoryItemKind.StateChanged,
             payload);
 
-        await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+        await _context.OrderHistory.AddItemAsync(item, cancellationToken);
 
         transaction.Complete();
     }
@@ -270,7 +261,7 @@ internal sealed class OrderService : IOrderService
 
         var orderQuery = new OrderQuery([orderId], null, null, 0, 1);
 
-        Order order = await _orderRepository
+        Order order = await _context.Orders
             .QueryOrdersAsync(orderQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken)
             ?? throw new OrderNotFoundException("Order not found.");
@@ -280,7 +271,7 @@ internal sealed class OrderService : IOrderService
 
         var payload = new UpdateStatePayload(order.OrderState, OrderState.Cancelled);
 
-        await _orderRepository.UpdateOrderStateAsync(orderId, OrderState.Cancelled, cancellationToken);
+        await _context.Orders.UpdateOrderStateAsync(orderId, OrderState.Cancelled, cancellationToken);
 
         var item = new OrderHistoryItem(
             OrderHistoryItemId: default,
@@ -289,7 +280,7 @@ internal sealed class OrderService : IOrderService
             OrderHistoryItemKind.StateChanged,
             payload);
 
-        await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+        await _context.OrderHistory.AddItemAsync(item, cancellationToken);
 
         transaction.Complete();
     }
@@ -306,7 +297,7 @@ internal sealed class OrderService : IOrderService
             OrderHistoryItemKind.StateChanged,
             new BasePayload());
 
-        await _orderHistoryRepository.AddItemAsync(item, cancellationToken);
+        await _context.OrderHistory.AddItemAsync(item, cancellationToken);
     }
 
     public IAsyncEnumerable<Order> QueryOrdersAsync(
@@ -320,7 +311,7 @@ internal sealed class OrderService : IOrderService
             Cursor: request.Cursor,
             PageSize: request.PageSize);
 
-        return _orderRepository.QueryOrdersAsync(query, cancellationToken);
+        return _context.Orders.QueryOrdersAsync(query, cancellationToken);
     }
 
     public IAsyncEnumerable<OrderItem> QueryOrderItemsAsync(QueryOrderItems.Request request, CancellationToken cancellationToken)
@@ -333,7 +324,7 @@ internal sealed class OrderService : IOrderService
             Cursor: request.Cursor,
             PageSize: request.PageSize);
 
-        return _orderItemsRepository.QueryOrderItemsAsync(query, cancellationToken);
+        return _context.OrderItems.QueryOrderItemsAsync(query, cancellationToken);
     }
 
     public IAsyncEnumerable<OrderHistoryItem> QueryOrderHistoryAsync(
@@ -347,6 +338,6 @@ internal sealed class OrderService : IOrderService
             Cursor: request.Cursor,
             PageSize: request.PageSize);
 
-        return _orderHistoryRepository.QueryItemsAsync(query, cancellationToken);
+        return _context.OrderHistory.QueryItemsAsync(query, cancellationToken);
     }
 }
