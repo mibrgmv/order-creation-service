@@ -1,6 +1,7 @@
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OrderCreationService.Infrastructure.Kafka.Producer.Outbox;
 
 namespace OrderCreationService.Infrastructure.Kafka.Producer.Builders;
@@ -49,6 +50,9 @@ internal sealed class KafkaProducerBuilder<TKey, TValue> : IKafkaProducerAdditio
     public void Build()
     {
         _serviceCollection.AddKeyedScoped<IKafkaProducer<TKey, TValue>>(_topicName, (sp, _) =>
+            ActivatorUtilities.CreateInstance<KafkaProducer<TKey, TValue>>(sp, _topicName));
+
+        _serviceCollection.TryAddScoped<IKafkaProducer<TKey, TValue>>(sp =>
             ActivatorUtilities.CreateInstance<KafkaProducer<TKey, TValue>>(sp, _topicName));
     }
 }
