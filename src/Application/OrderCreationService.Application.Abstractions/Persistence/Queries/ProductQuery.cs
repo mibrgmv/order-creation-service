@@ -5,5 +5,5 @@ public record ProductQuery(
     string? NamePattern,
     decimal? MinPrice,
     decimal? MaxPrice,
-    long? Cursor,
+    long Cursor,
     int PageSize);

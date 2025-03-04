@@ -6,5 +6,5 @@ public record OrderQuery(
     long[]? Ids,
     OrderState? OrderState,
     string? CreatedBy,
-    long? Cursor,
+    long Cursor,
     int PageSize);

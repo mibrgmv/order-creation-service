@@ -5,5 +5,5 @@ public record OrderItemQuery(
     long[]? OrderIds,
     long[]? ProductIds,
     bool? Deleted,
-    long? Cursor,
+    long Cursor,
     int PageSize);

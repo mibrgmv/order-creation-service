@@ -6,5 +6,5 @@ public record OrderHistoryQuery(
     long[]? Ids,
     long[]? OrderIds,
     OrderHistoryItemKind? ItemKind,
-    long? Cursor,
+    long Cursor,
     int PageSize);
